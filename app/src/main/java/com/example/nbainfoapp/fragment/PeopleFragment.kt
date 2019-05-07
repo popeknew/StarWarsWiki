@@ -2,12 +2,14 @@ package com.example.nbainfoapp.fragment
 
 
 import android.os.Bundle
+import android.provider.Settings
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 
 import com.example.nbainfoapp.R
+import com.example.nbainfoapp.activity.NavigationActivity
 import com.example.nbainfoapp.adapter.PeopleRecyclerViewAdapter
 import com.example.nbainfoapp.model.PersonModel
 import com.example.nbainfoapp.repository.RepositoryRetrofit
@@ -27,7 +29,7 @@ class PeopleFragment : Fragment(), KodeinAware {
     private val repositoryRetrofit: RepositoryRetrofit by instance()
 
     private val peopleRecyclerViewAdapter = PeopleRecyclerViewAdapter()
-    private val loadingDialogFragment = LoadingDialogFragment()
+
     var currentPage = 1
 
     override fun onCreateView(
@@ -44,25 +46,21 @@ class PeopleFragment : Fragment(), KodeinAware {
         setupPreviousPageButton()
     }
 
-    override fun onViewStateRestored(savedInstanceState: Bundle?) {
-        setupNextPageButton()
-        setupPreviousPageButton()
-        super.onViewStateRestored(savedInstanceState)
-    }
-
     private fun setupRecyclerView() {
         recycler_view.adapter = peopleRecyclerViewAdapter
         getPeopleFromServer(repositoryRetrofit, currentPage)
     }
 
     private fun getPeopleFromServer(repositoryRetrofit: RepositoryRetrofit, numberOfPages: Int) {
-        loadingDialogFragment.show(fragmentManager!!, "tag")
-        GlobalScope.launch(Dispatchers.Main) {
-            createListOfPeople(repositoryRetrofit.getPeople(numberOfPages))
+        (activity as NavigationActivity).showProgress()
+
+        GlobalScope.launch {
+            val list = repositoryRetrofit.getPeople(numberOfPages)
             withContext(Dispatchers.Main) {
-                loadingDialogFragment.dismiss()
+                createListOfPeople(list)
+               //
             }
-        }
+        }.invokeOnCompletion { (activity as NavigationActivity).hideProgress() }
     }
 
     private fun createListOfPeople(list: MutableList<PersonModel>) {

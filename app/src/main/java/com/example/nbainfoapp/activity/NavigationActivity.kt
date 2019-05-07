@@ -15,11 +15,14 @@ import androidx.appcompat.app.ActionBar
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
 import com.example.nbainfoapp.R
+import com.example.nbainfoapp.fragment.LoadingDialogFragment
 import com.example.nbainfoapp.fragment.PeopleFragment
 import kotlinx.android.synthetic.main.activity_navigation.*
 import kotlinx.android.synthetic.main.app_bar_navigation.*
 
 class NavigationActivity : AppCompatActivity() {
+
+    private val loadingDialogFragment = LoadingDialogFragment()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,4 +74,11 @@ class NavigationActivity : AppCompatActivity() {
         mDrawerToggle.syncState()
     }
 
+    fun showProgress() {
+        loadingDialogFragment.show(supportFragmentManager, "tag")
+    }
+
+    fun hideProgress() {
+        loadingDialogFragment.dismiss()
+    }
 }
