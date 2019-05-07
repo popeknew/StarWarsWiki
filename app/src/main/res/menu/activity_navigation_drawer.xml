@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+        <item
+            android:id="@+id/nav_people"
+            android:icon="@drawable/ic_person_black_24dp"
+            android:title="@string/menu_people" />
+        <item
+            android:id="@+id/nav_planets"
+            android:icon="@drawable/earth"
+            android:title="@string/menu_planets" />
+        <item
+            android:id="@+id/nav_films"
+            android:icon="@drawable/video_vintage"
+            android:title="@string/menu_films" />
+
+        <!--<item
+            android:id="@+id/nav_tools"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="@string/menu_tools" />-->
+
+</menu>

@@ -1,6 +1,7 @@
 package com.example.nbainfoapp
 
 import android.app.Application
+import com.example.nbainfoapp.repository.RepositoryRetrofit
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import okhttp3.OkHttpClient
 import org.kodein.di.Kodein
@@ -11,7 +12,7 @@ import org.kodein.di.generic.singleton
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-private const val BASE_URL = "https://stats.nba.com/stats"
+private const val BASE_URL = "https://swapi.co/api/"
 
 class MyApplication: Application(), KodeinAware {
 
@@ -24,7 +25,7 @@ class MyApplication: Application(), KodeinAware {
 
         bind<Retrofit>() with singleton {
             Retrofit.Builder()
-                .client(instance())
+                .client(OkHttpClient())
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(CoroutineCallAdapterFactory())
@@ -34,6 +35,10 @@ class MyApplication: Application(), KodeinAware {
         bind<RestApi>() with singleton {
             val retrofit: Retrofit = instance()
             retrofit.create(RestApi::class.java)
+        }
+
+        bind<RepositoryRetrofit>() with singleton {
+            RepositoryRetrofit(instance())
         }
     }
 }
