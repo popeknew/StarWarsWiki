@@ -14,6 +14,7 @@ import com.example.nbainfoapp.adapter.PeopleRecyclerViewAdapter
 import com.example.nbainfoapp.model.PersonModel
 import com.example.nbainfoapp.repository.RepositoryRetrofit
 import kotlinx.android.synthetic.main.fragment_people.*
+import kotlinx.android.synthetic.main.fragment_people.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -42,8 +43,24 @@ class PeopleFragment : Fragment(), KodeinAware {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setupRecyclerView()
-        setupNextPageButton()
-        setupPreviousPageButton()
+
+        nextPageButton.setOnClickListener {
+            when (currentPage) {
+                9 -> view.nextPageButton.visibility = View.GONE
+                else -> view.nextPageButton.visibility = View.VISIBLE
+            }
+            currentPage += 1
+            getPeopleFromServer(repositoryRetrofit, currentPage)
+        }
+
+        previousPageButton.setOnClickListener {
+            when (currentPage) {
+                1 -> view.previousPageButton.visibility = View.GONE
+                else -> view.previousPageButton.visibility = View.VISIBLE
+            }
+            currentPage -= 1
+            getPeopleFromServer(repositoryRetrofit, currentPage)
+        }
     }
 
     private fun setupRecyclerView() {
@@ -52,29 +69,29 @@ class PeopleFragment : Fragment(), KodeinAware {
     }
 
     private fun getPeopleFromServer(repositoryRetrofit: RepositoryRetrofit, numberOfPages: Int) {
-        (activity as NavigationActivity).showProgress()
+       // (activity as NavigationActivity).showProgress()
 
         GlobalScope.launch {
             val list = repositoryRetrofit.getPeople(numberOfPages)
             withContext(Dispatchers.Main) {
                 createListOfPeople(list)
-               //
+               // activity as NavigationActivity).hideProgress()
             }
-        }.invokeOnCompletion { (activity as NavigationActivity).hideProgress() }
+        }
     }
 
     private fun createListOfPeople(list: MutableList<PersonModel>) {
         peopleRecyclerViewAdapter.swapPeople(list)
     }
 
-    private fun setupNextPageButton() {
+    private fun setupNextPageButton(view: View) {
         if (currentPage < 9) {
             nextPageButton.setOnClickListener {
                 currentPage += 1
                 getPeopleFromServer(repositoryRetrofit, currentPage)
 
                 setButtonVisible(nextPageButton)
-                println(currentPage)
+
             }
         } else {
             setButtonGone(nextPageButton)
@@ -88,18 +105,18 @@ class PeopleFragment : Fragment(), KodeinAware {
                 getPeopleFromServer(repositoryRetrofit, currentPage)
 
                 setButtonVisible(previousPageButton)
-                println(currentPage)
+
             }
         } else {
             setButtonGone(previousPageButton)
         }
     }
 
-    fun setButtonVisible(view: View) {
+    private fun setButtonVisible(view: View) {
         view.visibility = View.VISIBLE
     }
 
-    fun setButtonGone(view: View) {
+    private fun setButtonGone(view: View) {
         view.visibility = View.GONE
     }
 }
