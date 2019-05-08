@@ -40,7 +40,6 @@ class PeopleDetailsActivity : AppCompatActivity() {
         }
         detailsDiameter.text = personModel.height
         detailsRotationPeriod.text = personModel.eyeColor
-        detailsFilms.text = addString(personModel.films)
         detailsOrbitalPeriod.text = personModel.gender
         detailsGravity.text = personModel.hairColor
         detailsSurfaceWater.text = personModel.homeworld

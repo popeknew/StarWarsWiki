@@ -23,7 +23,5 @@ data class PersonModel(
     @SerializedName("mass")
     val mass: String,
     @SerializedName("skin_color")
-    val skinColor: String,
-    @SerializedName("films")
-    val films: Array<String>
+    val skinColor: String
 ) : Parcelable

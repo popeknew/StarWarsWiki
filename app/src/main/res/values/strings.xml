@@ -35,7 +35,6 @@
     <string name="films">Films</string>
 
     <!-- Planets details layout -->
-    <string name="name">Name</string>
     <string name="rotation_period">Rotation period</string>
     <string name="orbital_period">Orbital period</string>
     <string name="diameter">Diameter</string>
@@ -44,4 +43,11 @@
     <string name="terrain">Terrain</string>
     <string name="population">Population</string>
     <string name="surface_water">Surface water</string>
+
+    <!-- Films details layout -->
+    <string name="director">Director</string>
+    <string name="episode_id">Episode No.</string>
+    <string name="opening_crawl">Opening crawl</string>
+    <string name="producer">Producer</string>
+    <string name="release_date">Release date</string>
 </resources>
