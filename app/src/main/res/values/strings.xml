@@ -23,7 +23,7 @@
     <string name="next_page">Next page</string>
     <string name="previous_page">Previous page</string>
 
-    <!-- Details layout-->
+    <!-- People details layout-->
     <string name="height">Height </string>
     <string name="mass">Mass</string>
     <string name="hair_color">Hair color</string>
@@ -33,4 +33,15 @@
     <string name="gender">Gender</string>
     <string name="homeworld">Homeworld</string>
     <string name="films">Films</string>
+
+    <!-- Planets details layout -->
+    <string name="name">Name</string>
+    <string name="rotation_period">Rotation period</string>
+    <string name="orbital_period">Orbital period</string>
+    <string name="diameter">Diameter</string>
+    <string name="climate">Climate</string>
+    <string name="gravity">Gravity</string>
+    <string name="terrain">Terrain</string>
+    <string name="population">Population</string>
+    <string name="surface_water">Surface water</string>
 </resources>
