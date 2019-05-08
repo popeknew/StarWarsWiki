@@ -22,4 +22,6 @@
     <string name="menu_films">Films</string>
     <string name="next_page">Next page</string>
     <string name="previous_page">Previous page</string>
+
+    <string name="height">Height </string>
 </resources>

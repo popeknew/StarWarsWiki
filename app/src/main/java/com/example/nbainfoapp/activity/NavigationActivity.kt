@@ -35,7 +35,7 @@ class NavigationActivity : AppCompatActivity() {
         val actionBar: ActionBar? = supportActionBar
         actionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
-            setHomeAsUpIndicator(R.drawable.hamburger)
+            setHomeAsUpIndicator(R.drawable.new_hamburger)
             setDisplayShowTitleEnabled(false)
         }
 
