@@ -1,8 +1,10 @@
 package com.example.nbainfoapp.model
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
-
+@Parcelize
 data class PersonModel(
     @SerializedName("name")
     val name: String,
@@ -24,4 +26,4 @@ data class PersonModel(
     val skinColor: String,
     @SerializedName("films")
     val films: Array<String>
-)
+) : Parcelable

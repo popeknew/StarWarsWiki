@@ -1,14 +1,17 @@
 package com.example.nbainfoapp.fragment
 
 
+import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
+import android.provider.Telephony.TextBasedSmsColumns.PERSON
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 
 import com.example.nbainfoapp.R
+import com.example.nbainfoapp.activity.DetailsActivity
 import com.example.nbainfoapp.activity.NavigationActivity
 import com.example.nbainfoapp.adapter.PeopleRecyclerViewAdapter
 import com.example.nbainfoapp.model.PersonModel
@@ -66,6 +69,9 @@ class PeopleFragment : Fragment(), KodeinAware {
     private fun setupRecyclerView() {
         recycler_view.adapter = peopleRecyclerViewAdapter
         getPeopleFromServer(repositoryRetrofit, currentPage)
+        peopleRecyclerViewAdapter.onRowClickListener = {personModel ->
+            startDetailsActivity(personModel)
+        }
     }
 
     private fun getPeopleFromServer(repositoryRetrofit: RepositoryRetrofit, numberOfPages: Int) {
@@ -118,5 +124,10 @@ class PeopleFragment : Fragment(), KodeinAware {
 
     private fun setButtonGone(view: View) {
         view.visibility = View.GONE
+    }
+
+    private fun startDetailsActivity(personModel: PersonModel) {
+        val intent = DetailsActivity.getIntent(context!!, personModel)
+        startActivity(intent)
     }
 }
