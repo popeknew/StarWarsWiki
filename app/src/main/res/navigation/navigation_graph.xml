@@ -18,4 +18,9 @@
         android:id="@+id/nav_films"
         android:name="com.example.nbainfoapp.fragment.FilmsFragment"
         android:label="FilmsFragment" />
+    <activity
+        android:id="@+id/nav_favorites"
+        android:name="com.example.nbainfoapp.activity.FavoritesActivity"
+        android:label="activity_favorites"
+        tools:layout="@layout/activity_favorites" />
 </navigation>

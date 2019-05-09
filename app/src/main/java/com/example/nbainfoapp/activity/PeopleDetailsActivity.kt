@@ -4,12 +4,23 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.Telephony.TextBasedSmsColumns.PERSON
 import android.view.MenuItem
 import com.example.nbainfoapp.R
 import com.example.nbainfoapp.model.PersonModel
+import com.example.nbainfoapp.repository.PeopleDatabaseRepository
 import kotlinx.android.synthetic.main.people_details.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import org.kodein.di.Kodein
+import org.kodein.di.KodeinAware
+import org.kodein.di.android.kodein
+import org.kodein.di.generic.instance
 
-class PeopleDetailsActivity : AppCompatActivity() {
+class PeopleDetailsActivity : AppCompatActivity(), KodeinAware {
+
+    override val kodein by kodein()
+    private val peopleDatabaseRepository: PeopleDatabaseRepository by instance()
 
     companion object {
 
@@ -30,6 +41,7 @@ class PeopleDetailsActivity : AppCompatActivity() {
 
         val person = intent.getParcelableExtra<PersonModel>(PERSON)
         setupPeopleDetailsActivity(person)
+        setupFavoritesButton(person)
     }
 
     private fun setupPeopleDetailsActivity(personModel: PersonModel) {
@@ -57,5 +69,17 @@ class PeopleDetailsActivity : AppCompatActivity() {
 
     private fun addString(list: Array<String>): String {
         return list.joinToString(separator = ", ")
+    }
+
+    private fun addPersonToFavorites(personModel: PersonModel) {
+        GlobalScope.launch {
+            peopleDatabaseRepository.insertPerson(personModel)
+        }
+    }
+
+    private fun setupFavoritesButton(personModel: PersonModel) {
+        floatingFavoriteButton.setOnClickListener {
+             addPersonToFavorites(personModel)
+        }
     }
 }

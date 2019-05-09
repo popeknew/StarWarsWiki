@@ -1,6 +1,9 @@
 package com.example.nbainfoapp
 
 import android.app.Application
+import androidx.room.Room
+import com.example.nbainfoapp.database.PeopleDatabase
+import com.example.nbainfoapp.repository.PeopleDatabaseRepository
 import com.example.nbainfoapp.repository.RepositoryRetrofit
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import okhttp3.OkHttpClient
@@ -39,6 +42,16 @@ class MyApplication: Application(), KodeinAware {
 
         bind<RepositoryRetrofit>() with singleton {
             RepositoryRetrofit(instance())
+        }
+
+        bind<PeopleDatabase>() with singleton {
+            Room.databaseBuilder(applicationContext, PeopleDatabase::class.java, "people.db")
+                .fallbackToDestructiveMigration()
+                .build()
+        }
+
+        bind<PeopleDatabaseRepository>() with singleton {
+            PeopleDatabaseRepository(instance())
         }
     }
 }

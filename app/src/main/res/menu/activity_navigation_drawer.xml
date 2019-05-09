@@ -16,9 +16,9 @@
             android:icon="@drawable/video_vintage"
             android:title="@string/menu_films" />
 
-        <!--<item
-            android:id="@+id/nav_tools"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="@string/menu_tools" />-->
+        <item
+            android:id="@+id/nav_favorites"
+            android:icon="@drawable/ic_action_name"
+            android:title="@string/menu_favorites" />
 
 </menu>

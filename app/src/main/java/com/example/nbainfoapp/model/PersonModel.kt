@@ -1,10 +1,13 @@
 package com.example.nbainfoapp.model
 
 import android.os.Parcelable
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
+@Entity
 data class PersonModel(
     @SerializedName("name")
     val name: String,
@@ -23,5 +26,7 @@ data class PersonModel(
     @SerializedName("mass")
     val mass: String,
     @SerializedName("skin_color")
-    val skinColor: String
+    val skinColor: String,
+    @PrimaryKey(autoGenerate = true)
+    val id: Int? = null
 ) : Parcelable

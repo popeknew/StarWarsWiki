@@ -6,7 +6,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
 import com.example.nbainfoapp.R
 import com.example.nbainfoapp.activity.NavigationActivity
 import com.example.nbainfoapp.activity.PeopleDetailsActivity
@@ -28,7 +27,6 @@ class PeopleFragment : Fragment(), KodeinAware {
 
     override val kodein by kodein()
     private val repositoryRetrofit: RepositoryRetrofit by instance()
-
     private val peopleRecyclerViewAdapter = PeopleRecyclerViewAdapter()
 
     var currentPage = 1
@@ -63,9 +61,14 @@ class PeopleFragment : Fragment(), KodeinAware {
         }
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        getPeopleFromServer(repositoryRetrofit, currentPage)
+    }
+
     private fun setupRecyclerView() {
         recycler_view.adapter = peopleRecyclerViewAdapter
-        getPeopleFromServer(repositoryRetrofit, currentPage)
+        //getPeopleFromServer(repositoryRetrofit, currentPage)
         peopleRecyclerViewAdapter.onRowClickListener = {personModel ->
             startDetailsActivity(personModel)
         }
