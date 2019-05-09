@@ -38,14 +38,14 @@ class PeopleDetailsActivity : AppCompatActivity() {
             setCollapsedTitleTextColor(getColor(R.color.white))
             setExpandedTitleColor(getColor(R.color.white))
         }
-        detailsDiameter.text = personModel.height
+        detailsDirector.text = personModel.height
         detailsRotationPeriod.text = personModel.eyeColor
         detailsOrbitalPeriod.text = personModel.gender
-        detailsGravity.text = personModel.hairColor
+        detailsProducer.text = personModel.hairColor
         detailsSurfaceWater.text = personModel.homeworld
-        detailsClimate.text = personModel.mass
-        detailsTerrain.text = personModel.skinColor
-        detailsPopulation.text = personModel.birthYear
+        detailsEpisodeId.text = personModel.mass
+        detailsReleaseDate.text = personModel.skinColor
+        detailsOpeningCrawl.text = personModel.birthYear
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {

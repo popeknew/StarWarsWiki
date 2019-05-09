@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.nbainfoapp.R
+import com.example.nbainfoapp.activity.FilmsDetailsActivity
 import com.example.nbainfoapp.adapter.FilmsRecyclerViewAdapter
 import com.example.nbainfoapp.model.FilmModel
 import com.example.nbainfoapp.repository.RepositoryRetrofit
@@ -41,7 +42,7 @@ class FilmsFragment : Fragment(), KodeinAware {
         recycler_view.adapter = filmsRecyclerViewAdapter
         getPlanetsFromServer(repositoryRetrofit)
         filmsRecyclerViewAdapter.onRowClickListener = { filmModel ->
-
+            startDetailsActivity(filmModel)
         }
     }
 
@@ -52,12 +53,17 @@ class FilmsFragment : Fragment(), KodeinAware {
             val list = repositoryRetrofit.getFilms()
             withContext(Dispatchers.Main) {
                 createListOfPeople(list)
-                // activity as NavigationActivity).hideProgress()
+                // (activity as NavigationActivity).hideProgress()
             }
         }
     }
 
     private fun createListOfPeople(list: MutableList<FilmModel>) {
         filmsRecyclerViewAdapter.swapFilms(list)
+    }
+
+    private fun startDetailsActivity(filmModel: FilmModel) {
+        val intent = FilmsDetailsActivity.getIntent(context!!, filmModel)
+        startActivity(intent)
     }
 }

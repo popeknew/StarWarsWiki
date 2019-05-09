@@ -45,13 +45,13 @@ class PlanetsDetailsActivity : AppCompatActivity() {
             setExpandedTitleColor(getColor(R.color.white))
             setCollapsedTitleTextColor(getColor(R.color.white))
         }
-        detailsClimate.text = planetModel.climate
-        detailsDiameter.text = planetModel.diameter
-        detailsGravity.text = planetModel.gravity
+        detailsEpisodeId.text = planetModel.climate
+        detailsDirector.text = planetModel.diameter
+        detailsProducer.text = planetModel.gravity
         detailsOrbitalPeriod.text = planetModel.orbitalPeriod
-        detailsPopulation.text = planetModel.population
+        detailsOpeningCrawl.text = planetModel.population
         detailsSurfaceWater.text = planetModel.surfaceWater
         detailsRotationPeriod.text = planetModel.rotationPeriod
-        detailsTerrain.text = planetModel.terrain
+        detailsReleaseDate.text = planetModel.terrain
     }
 }

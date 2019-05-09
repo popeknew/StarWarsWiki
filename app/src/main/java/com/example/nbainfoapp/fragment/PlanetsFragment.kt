@@ -57,7 +57,7 @@ class PlanetsFragment : Fragment(), KodeinAware {
             val list = repositoryRetrofit.getPlanets(numberOfPages)
             withContext(Dispatchers.Main) {
                 createListOfPlanets(list)
-                // activity as NavigationActivity).hideProgress()
+                // (activity as NavigationActivity).hideProgress()
             }
         }
     }
