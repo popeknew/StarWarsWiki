@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
 
 import com.example.nbainfoapp.R
 import com.example.nbainfoapp.adapter.PeopleRecyclerViewAdapter
@@ -40,6 +41,9 @@ class PeopleFavoritesFragment : Fragment(), KodeinAware {
     private fun setupRecyclerView() {
         recycler_view.adapter = peopleRecyclerViewAdapter
         synchronizePeopleDatabase()
+        peopleRecyclerViewAdapter.onRowLongClickListener = { person, view ->
+
+        }
     }
 
     private fun synchronizePeopleDatabase() = GlobalScope.launch(Dispatchers.Main) {

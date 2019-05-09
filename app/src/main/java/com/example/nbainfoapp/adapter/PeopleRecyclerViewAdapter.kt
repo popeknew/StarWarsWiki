@@ -8,13 +8,21 @@ import com.example.nbainfoapp.R
 import com.example.nbainfoapp.model.Person
 import kotlinx.android.synthetic.main.people_row.view.*
 
-class PeopleRecyclerViewAdapter : RecyclerView.Adapter<PeopleRecyclerViewAdapter.PeopleViewHolder>() {
+class PeopleRecyclerViewAdapter :
+    RecyclerView.Adapter<PeopleRecyclerViewAdapter.PeopleViewHolder>() {
 
     private val listOfPeople = mutableListOf<Person>()
     var onRowClickListener: ((Person) -> Unit)? = null
+    var onRowLongClickListener: ((Person) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PeopleViewHolder {
-        return PeopleViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.people_row, parent, false))
+        return PeopleViewHolder(
+            LayoutInflater.from(parent.context).inflate(
+                R.layout.people_row,
+                parent,
+                false
+            )
+        )
     }
 
     override fun getItemCount(): Int = listOfPeople.size
@@ -24,6 +32,10 @@ class PeopleRecyclerViewAdapter : RecyclerView.Adapter<PeopleRecyclerViewAdapter
         val person = listOfPeople[position]
         holder.itemView.personName.text = person.name
         holder.itemView.setOnClickListener { onRowClickListener?.invoke(person) }
+        holder.itemView.setOnLongClickListener {
+            onRowLongClickListener?.invoke(person)
+            true
+        }
     }
 
     class PeopleViewHolder(view: View) : RecyclerView.ViewHolder(view)
