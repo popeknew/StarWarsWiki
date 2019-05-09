@@ -7,10 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.nbainfoapp.R
-import com.example.nbainfoapp.activity.NavigationActivity
 import com.example.nbainfoapp.activity.PeopleDetailsActivity
 import com.example.nbainfoapp.adapter.PeopleRecyclerViewAdapter
-import com.example.nbainfoapp.model.PersonModel
+import com.example.nbainfoapp.model.Person
 import com.example.nbainfoapp.repository.RepositoryRetrofit
 import kotlinx.android.synthetic.main.fragment_people.*
 import kotlinx.android.synthetic.main.fragment_people.view.*
@@ -69,24 +68,25 @@ class PeopleFragment : Fragment(), KodeinAware {
     private fun setupRecyclerView() {
         recycler_view.adapter = peopleRecyclerViewAdapter
         //getPeopleFromServer(repositoryRetrofit, currentPage)
-        peopleRecyclerViewAdapter.onRowClickListener = {personModel ->
+        peopleRecyclerViewAdapter.onRowClickListener = { personModel ->
             startDetailsActivity(personModel)
         }
     }
 
     private fun getPeopleFromServer(repositoryRetrofit: RepositoryRetrofit, numberOfPages: Int) {
-//        (activity as NavigationActivity).showProgress()
-
         GlobalScope.launch {
+            withContext(Dispatchers.Main) {
+               // (activity as NavigationActivity).showProgress()
+            }
             val list = repositoryRetrofit.getPeople(numberOfPages)
             withContext(Dispatchers.Main) {
                 createListOfPeople(list)
-//                (activity as NavigationActivity).hideProgress()
+               // (activity as NavigationActivity).hideProgress()
             }
         }
     }
 
-    private fun createListOfPeople(list: MutableList<PersonModel>) {
+    private fun createListOfPeople(list: MutableList<Person>) {
         peopleRecyclerViewAdapter.swapPeople(list)
     }
 
@@ -126,8 +126,8 @@ class PeopleFragment : Fragment(), KodeinAware {
         view.visibility = View.GONE
     }
 
-    private fun startDetailsActivity(personModel: PersonModel) {
-        val intent = PeopleDetailsActivity.getIntent(context!!, personModel)
+    private fun startDetailsActivity(person: Person) {
+        val intent = PeopleDetailsActivity.getIntent(context!!, person)
         startActivity(intent)
     }
 }

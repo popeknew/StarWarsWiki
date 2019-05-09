@@ -4,23 +4,30 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.Telephony.TextBasedSmsColumns.PERSON
-import android.view.Gravity
 import android.view.MenuItem
 import com.example.nbainfoapp.R
-import com.example.nbainfoapp.model.FilmModel
-import com.example.nbainfoapp.model.PersonModel
+import com.example.nbainfoapp.model.Film
+import com.example.nbainfoapp.repository.FilmsDatabaseRepository
 import kotlinx.android.synthetic.main.films_details.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import org.kodein.di.KodeinAware
+import org.kodein.di.android.kodein
+import org.kodein.di.generic.instance
 
-class FilmsDetailsActivity : AppCompatActivity() {
+class FilmsDetailsActivity : AppCompatActivity(), KodeinAware {
+
+    override val kodein by kodein()
+    private val filmsDatabaseRepository: FilmsDatabaseRepository by instance()
 
     companion object {
 
         private const val FILM = "film"
 
-        fun getIntent(context: Context, filmModel: FilmModel): Intent {
+        fun getIntent(context: Context, film: Film): Intent {
             return Intent(context, FilmsDetailsActivity::class.java).apply {
-                putExtra(FILM, filmModel)
+                putExtra(FILM, film)
             }
         }
     }
@@ -31,21 +38,23 @@ class FilmsDetailsActivity : AppCompatActivity() {
         supportActionBar?.setDisplayShowTitleEnabled(false)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        val film = intent.getParcelableExtra<FilmModel>(FILM)
+        val film = intent.getParcelableExtra<Film>(FILM)
         setupFilmsDetailsActivity(film)
+        setupFavoritesButton(film)
+        setupOpeningCrawlButton(film)
     }
 
-    private fun setupFilmsDetailsActivity(filmModel: FilmModel) {
+    private fun setupFilmsDetailsActivity(film: Film) {
         collapsingToolbar.apply {
-            title = filmModel.title
+            title = film.title
             setCollapsedTitleTextColor(getColor(R.color.white))
             setExpandedTitleColor(getColor(R.color.white))
            // expandedTitleGravity = Gravity.START
         }
-        detailsDirector.text = filmModel.director
-        detailsEpisodeId.text = filmModel.episodeId
-        detailsProducer.text = filmModel.producer
-        detailsReleaseDate.text = filmModel.releaseDate
+        detailsDirector.text = film.director
+        detailsEpisodeId.text = film.episodeId
+        detailsProducer.text = film.producer
+        detailsReleaseDate.text = film.releaseDate
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -53,5 +62,26 @@ class FilmsDetailsActivity : AppCompatActivity() {
             android.R.id.home -> finish()
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun addFilmToFavorites(film: Film) = GlobalScope.launch(Dispatchers.Main) {
+        filmsDatabaseRepository.insertFilm(film)
+    }
+
+    private fun setupFavoritesButton(film: Film) {
+        floatingFavoriteButton.setOnClickListener {
+            addFilmToFavorites(film)
+        }
+    }
+
+    private fun setupOpeningCrawlButton(film: Film) {
+        butonik.setOnClickListener {
+            startOpeningCrawlActivity(film)
+        }
+    }
+
+    private fun startOpeningCrawlActivity(film: Film) {
+        val intent = FilmOpeningCrawlActivity.getIntent(this, film)
+        startActivity(intent)
     }
 }

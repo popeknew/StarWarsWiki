@@ -5,15 +5,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.nbainfoapp.R
-import com.example.nbainfoapp.model.PersonModel
-import com.example.nbainfoapp.model.PlanetModel
-import kotlinx.android.synthetic.main.people_row.view.*
+import com.example.nbainfoapp.model.Planet
 import kotlinx.android.synthetic.main.planets_row.view.*
 
 class PlanetsRecyclerViewAdapter : RecyclerView.Adapter<PlanetsRecyclerViewAdapter.PlanetsViewHolder>() {
 
-    private val listOfPlanets = mutableListOf<PlanetModel>()
-    var onRowClickListener: ((PlanetModel) -> Unit)? = null
+    private val listOfPlanets = mutableListOf<Planet>()
+    var onRowClickListener: ((Planet) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlanetsViewHolder {
         return PlanetsViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.planets_row, parent, false))
@@ -30,13 +28,13 @@ class PlanetsRecyclerViewAdapter : RecyclerView.Adapter<PlanetsRecyclerViewAdapt
 
     class PlanetsViewHolder(view: View) : RecyclerView.ViewHolder(view)
 
-    fun swapPlanets(list: MutableList<PlanetModel>) {
+    fun swapPlanets(list: MutableList<Planet>) {
         listOfPlanets.clear()
         listOfPlanets.addAll(list)
         notifyDataSetChanged()
     }
 
-    fun addPlanetsList(list: MutableList<PlanetModel>) {
+    fun addPlanetsList(list: MutableList<Planet>) {
         listOfPlanets.addAll(list)
         notifyItemInserted(listOfPlanets.size)
     }

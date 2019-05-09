@@ -8,8 +8,21 @@ import android.view.View
 import android.view.ViewGroup
 
 import com.example.nbainfoapp.R
+import com.example.nbainfoapp.adapter.PlanetsRecyclerViewAdapter
+import com.example.nbainfoapp.repository.PlanetsDatabaseRepository
+import kotlinx.android.synthetic.main.fragment_planets_favorites.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import org.kodein.di.KodeinAware
+import org.kodein.di.android.support.kodein
+import org.kodein.di.generic.instance
 
-class PlanetsFavoritesFragment : Fragment() {
+class PlanetsFavoritesFragment : Fragment(), KodeinAware {
+
+    override val kodein by kodein()
+    private val planetsDatabaseRepository: PlanetsDatabaseRepository by instance()
+    private val planetsRecyclerViewAdapter = PlanetsRecyclerViewAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -17,6 +30,20 @@ class PlanetsFavoritesFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_planets_favorites, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        setupRecyclerView()
+    }
+
+    private fun setupRecyclerView() {
+        recycler_view.adapter = planetsRecyclerViewAdapter
+        synchoronizePlanetsDatabase()
+    }
+
+    private fun synchoronizePlanetsDatabase() = GlobalScope.launch(Dispatchers.Main) {
+        val list = planetsDatabaseRepository.getFavoritePlanets()
+        planetsRecyclerViewAdapter.swapPlanets(list)
     }
 
 

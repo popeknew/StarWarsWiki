@@ -1,11 +1,14 @@
 package com.example.nbainfoapp.model
 
 import android.os.Parcelable
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class FilmModel(
+@Entity
+data class Film(
     @SerializedName("title")
     val title: String,
     @SerializedName("episode_id")
@@ -17,5 +20,7 @@ data class FilmModel(
     @SerializedName("producer")
     val producer: String? = null,
     @SerializedName("release_date")
-    val releaseDate: String? = null
+    val releaseDate: String? = null,
+    @PrimaryKey(autoGenerate = true)
+    val id: Int? = null
 ): Parcelable

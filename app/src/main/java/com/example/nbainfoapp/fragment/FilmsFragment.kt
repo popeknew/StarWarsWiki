@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import com.example.nbainfoapp.R
 import com.example.nbainfoapp.activity.FilmsDetailsActivity
 import com.example.nbainfoapp.adapter.FilmsRecyclerViewAdapter
-import com.example.nbainfoapp.model.FilmModel
+import com.example.nbainfoapp.model.Film
 import com.example.nbainfoapp.repository.RepositoryRetrofit
 import kotlinx.android.synthetic.main.fragment_films.*
 import kotlinx.coroutines.Dispatchers
@@ -58,12 +58,12 @@ class FilmsFragment : Fragment(), KodeinAware {
         }
     }
 
-    private fun createListOfPeople(list: MutableList<FilmModel>) {
+    private fun createListOfPeople(list: MutableList<Film>) {
         filmsRecyclerViewAdapter.swapFilms(list)
     }
 
-    private fun startDetailsActivity(filmModel: FilmModel) {
-        val intent = FilmsDetailsActivity.getIntent(context!!, filmModel)
+    private fun startDetailsActivity(film: Film) {
+        val intent = FilmsDetailsActivity.getIntent(context!!, film)
         startActivity(intent)
     }
 }

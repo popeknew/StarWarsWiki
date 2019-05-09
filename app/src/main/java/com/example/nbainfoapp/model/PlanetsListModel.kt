@@ -4,5 +4,5 @@ import com.google.gson.annotations.SerializedName
 
 data class PlanetsListModel(
     @SerializedName("results")
-    val planets: List<PlanetModel>
+    val planets: List<Planet>
 )

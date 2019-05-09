@@ -1,11 +1,14 @@
 package com.example.nbainfoapp.model
 
 import android.os.Parcelable
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class PlanetModel(
+@Entity
+data class Planet(
     @SerializedName("name")
     val name: String,
     @SerializedName("diameter")
@@ -23,5 +26,7 @@ data class PlanetModel(
     @SerializedName("orbital_period")
     val orbitalPeriod: String,
     @SerializedName("rotation_period")
-    val rotationPeriod: String
+    val rotationPeriod: String,
+    @PrimaryKey(autoGenerate = true)
+    val id: Int? = null
 ): Parcelable

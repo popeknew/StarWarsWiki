@@ -1,7 +1,7 @@
 package com.example.nbainfoapp.repository
 
 import com.example.nbainfoapp.database.PeopleDatabase
-import com.example.nbainfoapp.model.PersonModel
+import com.example.nbainfoapp.model.Person
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -10,15 +10,15 @@ class PeopleDatabaseRepository(val database: PeopleDatabase) {
 
     val personDao = database.personDao()
 
-    suspend fun insertPerson(personModel: PersonModel) = withContext(Dispatchers.IO) {
-        personDao.insertPerson(personModel)
+    suspend fun insertPerson(person: Person) = withContext(Dispatchers.IO) {
+        personDao.insertPerson(person)
     }
 
-    suspend fun deletePerson(personModel: PersonModel) = withContext(Dispatchers.IO) {
-        personDao.deletePerson(personModel)
+    suspend fun deletePerson(person: Person) = withContext(Dispatchers.IO) {
+        personDao.deletePerson(person)
     }
 
-    suspend fun getFavoritePeople() : MutableList<PersonModel> = withContext(Dispatchers.IO) {
+    suspend fun getFavoritePeople() : MutableList<Person> = withContext(Dispatchers.IO) {
         personDao.getFavoritePeople()
     }
 }

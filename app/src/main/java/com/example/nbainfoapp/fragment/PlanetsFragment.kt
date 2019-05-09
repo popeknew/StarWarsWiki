@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import com.example.nbainfoapp.R
 import com.example.nbainfoapp.activity.PlanetsDetailsActivity
 import com.example.nbainfoapp.adapter.PlanetsRecyclerViewAdapter
-import com.example.nbainfoapp.model.PlanetModel
+import com.example.nbainfoapp.model.Planet
 import com.example.nbainfoapp.repository.RepositoryRetrofit
 import kotlinx.android.synthetic.main.fragment_planets.*
 import kotlinx.coroutines.Dispatchers
@@ -62,12 +62,12 @@ class PlanetsFragment : Fragment(), KodeinAware {
         }
     }
 
-    private fun createListOfPlanets(list: MutableList<PlanetModel>) {
+    private fun createListOfPlanets(list: MutableList<Planet>) {
         planetsRecyclerViewAdapter.swapPlanets(list)
     }
 
-    private fun startDetailsActivity(planetModel: PlanetModel) {
-        val intent = PlanetsDetailsActivity.getIntent(context!!, planetModel)
+    private fun startDetailsActivity(planet: Planet) {
+        val intent = PlanetsDetailsActivity.getIntent(context!!, planet)
         startActivity(intent)
     }
 }

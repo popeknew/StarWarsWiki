@@ -8,7 +8,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 @Entity
-data class PersonModel(
+data class Person(
     @SerializedName("name")
     val name: String,
     @SerializedName("birth_year")

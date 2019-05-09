@@ -6,18 +6,36 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import com.example.nbainfoapp.R
-import com.example.nbainfoapp.model.PlanetModel
-import kotlinx.android.synthetic.main.planets_details.*
+import com.example.nbainfoapp.model.Planet
+import com.example.nbainfoapp.repository.PlanetsDatabaseRepository
+import kotlinx.android.synthetic.main.planets_details.collapsingToolbar
+import kotlinx.android.synthetic.main.planets_details.detailsDirector
+import kotlinx.android.synthetic.main.planets_details.detailsEpisodeId
+import kotlinx.android.synthetic.main.planets_details.detailsOpeningCrawl
+import kotlinx.android.synthetic.main.planets_details.detailsOrbitalPeriod
+import kotlinx.android.synthetic.main.planets_details.detailsProducer
+import kotlinx.android.synthetic.main.planets_details.detailsReleaseDate
+import kotlinx.android.synthetic.main.planets_details.detailsRotationPeriod
+import kotlinx.android.synthetic.main.planets_details.detailsSurfaceWater
+import kotlinx.android.synthetic.main.planets_details.floatingFavoriteButton
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import org.kodein.di.KodeinAware
+import org.kodein.di.android.kodein
+import org.kodein.di.generic.instance
 
-class PlanetsDetailsActivity : AppCompatActivity() {
+class PlanetsDetailsActivity : AppCompatActivity(), KodeinAware {
+
+    override val kodein by kodein()
+    private val planetsDatabaseRepository: PlanetsDatabaseRepository by instance()
 
     companion object {
 
         private const val PLANET = "person"
 
-        fun getIntent(context: Context, planetModel: PlanetModel): Intent {
+        fun getIntent(context: Context, planet: Planet): Intent {
             return Intent(context, PlanetsDetailsActivity::class.java).apply {
-                putExtra(PLANET, planetModel)
+                putExtra(PLANET, planet)
             }
         }
     }
@@ -28,8 +46,9 @@ class PlanetsDetailsActivity : AppCompatActivity() {
         supportActionBar?.setDisplayShowTitleEnabled(false)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        val planet: PlanetModel = intent.getParcelableExtra(PLANET)
+        val planet: Planet = intent.getParcelableExtra(PLANET)
         setupPlanetsDetailsActivity(planet)
+        setupFavoritesButton(planet)
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -39,19 +58,31 @@ class PlanetsDetailsActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun setupPlanetsDetailsActivity(planetModel: PlanetModel) {
+    private fun setupPlanetsDetailsActivity(planet: Planet) {
         collapsingToolbar.apply {
-            title = planetModel.name
+            title = planet.name
             setExpandedTitleColor(getColor(R.color.white))
             setCollapsedTitleTextColor(getColor(R.color.white))
         }
-        detailsEpisodeId.text = planetModel.climate
-        detailsDirector.text = planetModel.diameter
-        detailsProducer.text = planetModel.gravity
-        detailsOrbitalPeriod.text = planetModel.orbitalPeriod
-        detailsOpeningCrawl.text = planetModel.population
-        detailsSurfaceWater.text = planetModel.surfaceWater
-        detailsRotationPeriod.text = planetModel.rotationPeriod
-        detailsReleaseDate.text = planetModel.terrain
+        detailsEpisodeId.text = planet.climate
+        detailsDirector.text = planet.diameter
+        detailsProducer.text = planet.gravity
+        detailsOrbitalPeriod.text = planet.orbitalPeriod
+        detailsOpeningCrawl.text = planet.population
+        detailsSurfaceWater.text = planet.surfaceWater
+        detailsRotationPeriod.text = planet.rotationPeriod
+        detailsReleaseDate.text = planet.terrain
+    }
+
+    private fun addPlanetToFavorites(planet: Planet) {
+        GlobalScope.launch {
+            planetsDatabaseRepository.insertPlanet(planet)
+        }
+    }
+
+    private fun setupFavoritesButton(planet: Planet) {
+        floatingFavoriteButton.setOnClickListener {
+            addPlanetToFavorites(planet)
+        }
     }
 }

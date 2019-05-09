@@ -5,13 +5,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.nbainfoapp.R
-import com.example.nbainfoapp.model.PersonModel
+import com.example.nbainfoapp.model.Person
 import kotlinx.android.synthetic.main.people_row.view.*
 
 class PeopleRecyclerViewAdapter : RecyclerView.Adapter<PeopleRecyclerViewAdapter.PeopleViewHolder>() {
 
-    private val listOfPeople = mutableListOf<PersonModel>()
-    var onRowClickListener: ((PersonModel) -> Unit)? = null
+    private val listOfPeople = mutableListOf<Person>()
+    var onRowClickListener: ((Person) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PeopleViewHolder {
         return PeopleViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.people_row, parent, false))
@@ -28,13 +28,13 @@ class PeopleRecyclerViewAdapter : RecyclerView.Adapter<PeopleRecyclerViewAdapter
 
     class PeopleViewHolder(view: View) : RecyclerView.ViewHolder(view)
 
-    fun swapPeople(list: MutableList<PersonModel>) {
+    fun swapPeople(list: MutableList<Person>) {
         listOfPeople.clear()
         listOfPeople.addAll(list)
         notifyDataSetChanged()
     }
 
-    fun addPeopleList(list: MutableList<PersonModel>) {
+    fun addPeopleList(list: MutableList<Person>) {
         listOfPeople.addAll(list)
         notifyItemInserted(listOfPeople.size)
     }

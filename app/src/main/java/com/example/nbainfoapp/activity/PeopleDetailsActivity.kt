@@ -4,15 +4,13 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.Telephony.TextBasedSmsColumns.PERSON
 import android.view.MenuItem
 import com.example.nbainfoapp.R
-import com.example.nbainfoapp.model.PersonModel
+import com.example.nbainfoapp.model.Person
 import com.example.nbainfoapp.repository.PeopleDatabaseRepository
 import kotlinx.android.synthetic.main.people_details.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.kodein
 import org.kodein.di.generic.instance
@@ -26,9 +24,9 @@ class PeopleDetailsActivity : AppCompatActivity(), KodeinAware {
 
         private const val PERSON = "person"
 
-        fun getIntent(context: Context, personModel: PersonModel): Intent {
+        fun getIntent(context: Context, person: Person): Intent {
             return Intent(context, PeopleDetailsActivity::class.java).apply {
-                putExtra(PERSON, personModel)
+                putExtra(PERSON, person)
             }
         }
     }
@@ -39,25 +37,25 @@ class PeopleDetailsActivity : AppCompatActivity(), KodeinAware {
         supportActionBar?.setDisplayShowTitleEnabled(false)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        val person = intent.getParcelableExtra<PersonModel>(PERSON)
+        val person = intent.getParcelableExtra<Person>(PERSON)
         setupPeopleDetailsActivity(person)
         setupFavoritesButton(person)
     }
 
-    private fun setupPeopleDetailsActivity(personModel: PersonModel) {
+    private fun setupPeopleDetailsActivity(person: Person) {
         collapsingToolbar.apply {
-            title = personModel.name
+            title = person.name
             setCollapsedTitleTextColor(getColor(R.color.white))
             setExpandedTitleColor(getColor(R.color.white))
         }
-        detailsDirector.text = personModel.height
-        detailsRotationPeriod.text = personModel.eyeColor
-        detailsOrbitalPeriod.text = personModel.gender
-        detailsProducer.text = personModel.hairColor
-        detailsSurfaceWater.text = personModel.homeworld
-        detailsEpisodeId.text = personModel.mass
-        detailsReleaseDate.text = personModel.skinColor
-        detailsOpeningCrawl.text = personModel.birthYear
+        detailsDirector.text = person.height
+        detailsRotationPeriod.text = person.eyeColor
+        detailsOrbitalPeriod.text = person.gender
+        detailsProducer.text = person.hairColor
+        detailsSurfaceWater.text = person.homeworld
+        detailsEpisodeId.text = person.mass
+        detailsReleaseDate.text = person.skinColor
+        detailsOpeningCrawl.text = person.birthYear
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -71,15 +69,15 @@ class PeopleDetailsActivity : AppCompatActivity(), KodeinAware {
         return list.joinToString(separator = ", ")
     }
 
-    private fun addPersonToFavorites(personModel: PersonModel) {
+    private fun addPersonToFavorites(person: Person) {
         GlobalScope.launch {
-            peopleDatabaseRepository.insertPerson(personModel)
+            peopleDatabaseRepository.insertPerson(person)
         }
     }
 
-    private fun setupFavoritesButton(personModel: PersonModel) {
+    private fun setupFavoritesButton(person: Person) {
         floatingFavoriteButton.setOnClickListener {
-             addPersonToFavorites(personModel)
+             addPersonToFavorites(person)
         }
     }
 }

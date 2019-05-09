@@ -5,13 +5,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.nbainfoapp.R
-import com.example.nbainfoapp.model.FilmModel
+import com.example.nbainfoapp.model.Film
 import kotlinx.android.synthetic.main.films_row.view.*
 
 class FilmsRecyclerViewAdapter : RecyclerView.Adapter<FilmsRecyclerViewAdapter.FilmsViewHolder>() {
 
-    private val listOfFilms = mutableListOf<FilmModel>()
-    var onRowClickListener: ((FilmModel) -> Unit)? = null
+    private val listOfFilms = mutableListOf<Film>()
+    var onRowClickListener: ((Film) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FilmsViewHolder {
         return FilmsViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.films_row, parent, false))
@@ -27,13 +27,13 @@ class FilmsRecyclerViewAdapter : RecyclerView.Adapter<FilmsRecyclerViewAdapter.F
 
     class FilmsViewHolder(view: View) : RecyclerView.ViewHolder(view)
 
-    fun swapFilms(list: MutableList<FilmModel>) {
+    fun swapFilms(list: MutableList<Film>) {
         listOfFilms.clear()
         listOfFilms.addAll(list)
         notifyDataSetChanged()
     }
 
-    fun addFilmsList(list: MutableList<FilmModel>) {
+    fun addFilmsList(list: MutableList<Film>) {
         listOfFilms.addAll(list)
         notifyItemInserted(listOfFilms.size)
     }
