@@ -10,6 +10,7 @@ import android.widget.PopupMenu
 
 import com.example.nbainfoapp.R
 import com.example.nbainfoapp.adapter.PeopleRecyclerViewAdapter
+import com.example.nbainfoapp.model.Person
 import com.example.nbainfoapp.repository.PeopleDatabaseRepository
 import kotlinx.android.synthetic.main.fragment_people_favorites.*
 import kotlinx.coroutines.Dispatchers
@@ -25,6 +26,7 @@ class PeopleFavoritesFragment : Fragment(), KodeinAware {
     override val kodein by kodein()
     private val peopleDatabaseRepository: PeopleDatabaseRepository by instance()
     private val peopleRecyclerViewAdapter = PeopleRecyclerViewAdapter()
+    private val deleteFromFavoritesDialogFragment = DeleteFromFavoritesDialogFragment()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,13 +43,26 @@ class PeopleFavoritesFragment : Fragment(), KodeinAware {
     private fun setupRecyclerView() {
         recycler_view.adapter = peopleRecyclerViewAdapter
         synchronizePeopleDatabase()
-        peopleRecyclerViewAdapter.onRowLongClickListener = { person, view ->
-
+        peopleRecyclerViewAdapter.onRowLongClickListener = { person, position  ->
+            deleteFromFavoritesDialogFragment.show(fragmentManager!!, "tag")
+            deleteFromFavoritesDialogFragment.deleteDecision = { decision ->
+                deletePersonFromDatabase(person, position, decision)
+                synchronizePeopleDatabase()
+            }
         }
     }
 
     private fun synchronizePeopleDatabase() = GlobalScope.launch(Dispatchers.Main) {
         val list = peopleDatabaseRepository.getFavoritePeople()
         peopleRecyclerViewAdapter.swapPeople(list)
+    }
+
+    private fun deletePersonFromDatabase(person: Person, position: Int, decision: Boolean) {
+        if (decision) {
+            GlobalScope.launch(Dispatchers.Main) {
+                peopleDatabaseRepository.deletePerson(person)
+                peopleRecyclerViewAdapter.removePerson(person, position)
+            }
+        }
     }
 }

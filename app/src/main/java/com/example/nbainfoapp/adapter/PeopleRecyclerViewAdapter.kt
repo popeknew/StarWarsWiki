@@ -13,7 +13,7 @@ class PeopleRecyclerViewAdapter :
 
     private val listOfPeople = mutableListOf<Person>()
     var onRowClickListener: ((Person) -> Unit)? = null
-    var onRowLongClickListener: ((Person) -> Unit)? = null
+    var onRowLongClickListener: ((Person, Int) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PeopleViewHolder {
         return PeopleViewHolder(
@@ -33,7 +33,7 @@ class PeopleRecyclerViewAdapter :
         holder.itemView.personName.text = person.name
         holder.itemView.setOnClickListener { onRowClickListener?.invoke(person) }
         holder.itemView.setOnLongClickListener {
-            onRowLongClickListener?.invoke(person)
+            onRowLongClickListener?.invoke(person, position)
             true
         }
     }
@@ -49,5 +49,10 @@ class PeopleRecyclerViewAdapter :
     fun addPeopleList(list: MutableList<Person>) {
         listOfPeople.addAll(list)
         notifyItemInserted(listOfPeople.size)
+    }
+
+    fun removePerson(person: Person, position: Int) {
+        listOfPeople.remove(person)
+        notifyItemRemoved(position)
     }
 }

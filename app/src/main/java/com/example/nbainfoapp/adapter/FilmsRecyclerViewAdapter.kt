@@ -12,9 +12,16 @@ class FilmsRecyclerViewAdapter : RecyclerView.Adapter<FilmsRecyclerViewAdapter.F
 
     private val listOfFilms = mutableListOf<Film>()
     var onRowClickListener: ((Film) -> Unit)? = null
+    var onRowLongClickListener: ((Film, Int) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FilmsViewHolder {
-        return FilmsViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.films_row, parent, false))
+        return FilmsViewHolder(
+            LayoutInflater.from(parent.context).inflate(
+                R.layout.films_row,
+                parent,
+                false
+            )
+        )
     }
 
     override fun getItemCount(): Int = listOfFilms.size
@@ -23,6 +30,10 @@ class FilmsRecyclerViewAdapter : RecyclerView.Adapter<FilmsRecyclerViewAdapter.F
         val film = listOfFilms[position]
         holder.itemView.filmTitle.text = film.title
         holder.itemView.setOnClickListener { onRowClickListener?.invoke(film) }
+        holder.itemView.setOnLongClickListener {
+            onRowLongClickListener?.invoke(film, position)
+            true
+        }
     }
 
     class FilmsViewHolder(view: View) : RecyclerView.ViewHolder(view)
@@ -36,5 +47,10 @@ class FilmsRecyclerViewAdapter : RecyclerView.Adapter<FilmsRecyclerViewAdapter.F
     fun addFilmsList(list: MutableList<Film>) {
         listOfFilms.addAll(list)
         notifyItemInserted(listOfFilms.size)
+    }
+
+    fun removePerson(film: Film, position: Int) {
+        listOfFilms.remove(film)
+        notifyItemRemoved(position)
     }
 }

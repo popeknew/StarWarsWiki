@@ -12,6 +12,7 @@ class PlanetsRecyclerViewAdapter : RecyclerView.Adapter<PlanetsRecyclerViewAdapt
 
     private val listOfPlanets = mutableListOf<Planet>()
     var onRowClickListener: ((Planet) -> Unit)? = null
+    var onRowLongClickListener: ((Planet, Int) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlanetsViewHolder {
         return PlanetsViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.planets_row, parent, false))
@@ -24,6 +25,10 @@ class PlanetsRecyclerViewAdapter : RecyclerView.Adapter<PlanetsRecyclerViewAdapt
 
         holder.itemView.planetName.text = planet.name
         holder.itemView.setOnClickListener { onRowClickListener?.invoke(planet) }
+        holder.itemView.setOnLongClickListener {
+            onRowLongClickListener?.invoke(planet, position)
+            true
+        }
     }
 
     class PlanetsViewHolder(view: View) : RecyclerView.ViewHolder(view)
@@ -37,5 +42,10 @@ class PlanetsRecyclerViewAdapter : RecyclerView.Adapter<PlanetsRecyclerViewAdapt
     fun addPlanetsList(list: MutableList<Planet>) {
         listOfPlanets.addAll(list)
         notifyItemInserted(listOfPlanets.size)
+    }
+
+    fun removePlanet(planet: Planet, position: Int) {
+        listOfPlanets.remove(planet)
+        notifyItemRemoved(position)
     }
 }

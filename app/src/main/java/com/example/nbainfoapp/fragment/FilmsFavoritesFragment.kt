@@ -9,6 +9,7 @@ import android.view.ViewGroup
 
 import com.example.nbainfoapp.R
 import com.example.nbainfoapp.adapter.FilmsRecyclerViewAdapter
+import com.example.nbainfoapp.model.Film
 import com.example.nbainfoapp.repository.FilmsDatabaseRepository
 import kotlinx.android.synthetic.main.fragment_films_favorites.*
 import kotlinx.coroutines.Dispatchers
@@ -23,6 +24,7 @@ class FilmsFavoritesFragment : Fragment(), KodeinAware {
     override val kodein by kodein()
     private val filmsDatabaseRepository by instance<FilmsDatabaseRepository>()
     private val filmsRecyclerViewAdapter = FilmsRecyclerViewAdapter()
+    private val deleteFromFavoritesDialogFragment = DeleteFromFavoritesDialogFragment()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,10 +41,26 @@ class FilmsFavoritesFragment : Fragment(), KodeinAware {
     private fun setupRecyclerView() {
         recycler_view.adapter = filmsRecyclerViewAdapter
         synchronizeFilmsDatabase()
+        filmsRecyclerViewAdapter.onRowLongClickListener = { film, position ->
+            deleteFromFavoritesDialogFragment.show(fragmentManager!!, "tag")
+            deleteFromFavoritesDialogFragment.deleteDecision = { decision ->
+                deleteFilmFromDatabase(film, position, decision)
+                synchronizeFilmsDatabase()
+            }
+        }
     }
 
     private fun synchronizeFilmsDatabase() = GlobalScope.launch(Dispatchers.Main) {
         val list = filmsDatabaseRepository.getFavoriteFilms()
         filmsRecyclerViewAdapter.swapFilms(list)
+    }
+
+    private fun deleteFilmFromDatabase(film: Film, position: Int, decision: Boolean) {
+        if (decision) {
+            GlobalScope.launch(Dispatchers.Main) {
+                filmsDatabaseRepository.deleteFilm(film)
+                filmsRecyclerViewAdapter.removePerson(film, position)
+            }
+        }
     }
 }
