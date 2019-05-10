@@ -6,10 +6,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import com.example.nbainfoapp.R
 import com.example.nbainfoapp.model.Person
 import com.example.nbainfoapp.repository.PeopleDatabaseRepository
 import kotlinx.android.synthetic.main.people_details.*
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.kodein.di.KodeinAware
@@ -20,14 +22,17 @@ class PeopleDetailsActivity : AppCompatActivity(), KodeinAware {
 
     override val kodein by kodein()
     private val peopleDatabaseRepository: PeopleDatabaseRepository by instance()
+    private val localDatabase = mutableListOf<Person>()
 
     companion object {
 
         private const val PERSON = "person"
+        private const val REMOTE_LIST = "remoteList"
 
-        fun getIntent(context: Context, person: Person): Intent {
+        fun getIntent(context: Context, person: Person, list: ArrayList<Person>): Intent {
             return Intent(context, PeopleDetailsActivity::class.java).apply {
                 putExtra(PERSON, person)
+                putExtra(REMOTE_LIST, list)
             }
         }
     }
@@ -39,8 +44,10 @@ class PeopleDetailsActivity : AppCompatActivity(), KodeinAware {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val person = intent.getParcelableExtra<Person>(PERSON)
+        val remoteList: ArrayList<Person> = intent.getParcelableArrayListExtra(REMOTE_LIST)
+        getPeoplesFromDatabase()
         setupPeopleDetailsActivity(person)
-        setupFavoritesButton(person)
+        // setupFavoritesButton(localList, person)
     }
 
     private fun setupPeopleDetailsActivity(person: Person) {
@@ -77,13 +84,33 @@ class PeopleDetailsActivity : AppCompatActivity(), KodeinAware {
         }
     }
 
-    private fun setupFavoritesButton(person: Person) {
+    private fun setupFavoritesButton(list: MutableList<Person>, person: Person) {
         if (person.inFavorites) {
             floatingFavoriteButton.hide()
         } else {
             floatingFavoriteButton.setOnClickListener {
-                addPersonToFavorites(person)
+                if (compareRemoteWithLocal(list, person)) {
+                    Toast.makeText(this, "chcesz to wyjebac?", Toast.LENGTH_LONG).show()
+                } else {
+                    addPersonToFavorites(person)
+                }
             }
+
         }
+    }
+
+    private fun getPeoplesFromDatabase() {
+        val list = mutableListOf<Person>()
+        GlobalScope.launch(Dispatchers.Main) {
+            val database = peopleDatabaseRepository.getFavoritePeople()
+            for (person in database) {
+                person.inFavorites = false
+            }
+            localDatabase.addAll(database)
+        }
+    }
+
+    private fun compareRemoteWithLocal(list: MutableList<Person>, person: Person): Boolean {
+        return list.contains(person)
     }
 }

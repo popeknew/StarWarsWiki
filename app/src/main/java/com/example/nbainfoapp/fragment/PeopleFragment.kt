@@ -27,6 +27,7 @@ class PeopleFragment : Fragment(), KodeinAware {
     override val kodein by kodein()
     private val repositoryRetrofit: RepositoryRetrofit by instance()
     private val peopleRecyclerViewAdapter = PeopleRecyclerViewAdapter()
+    private val remotePeopleArray = arrayListOf<Person>()
 
     var currentPage = 1
 
@@ -69,7 +70,7 @@ class PeopleFragment : Fragment(), KodeinAware {
         recycler_view.adapter = peopleRecyclerViewAdapter
         //getPeopleFromServer(repositoryRetrofit, currentPage)
         peopleRecyclerViewAdapter.onRowClickListener = { personModel ->
-            startDetailsActivity(personModel)
+            startDetailsActivity(personModel, remotePeopleArray)
         }
     }
 
@@ -79,6 +80,7 @@ class PeopleFragment : Fragment(), KodeinAware {
                // (activity as NavigationActivity).showProgress()
             }
             val list = repositoryRetrofit.getPeople(numberOfPages)
+            remotePeopleArray.addAll(list)
             withContext(Dispatchers.Main) {
                 createListOfPeople(list)
                // (activity as NavigationActivity).hideProgress()
@@ -126,8 +128,8 @@ class PeopleFragment : Fragment(), KodeinAware {
         view.visibility = View.GONE
     }
 
-    private fun startDetailsActivity(person: Person) {
-        val intent = PeopleDetailsActivity.getIntent(context!!, person)
+    private fun startDetailsActivity(person: Person, list: ArrayList<Person>) {
+        val intent = PeopleDetailsActivity.getIntent(context!!, person, list)
         startActivity(intent)
     }
 }

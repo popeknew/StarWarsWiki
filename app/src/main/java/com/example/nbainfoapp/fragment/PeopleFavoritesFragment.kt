@@ -71,7 +71,8 @@ class PeopleFavoritesFragment : Fragment(), KodeinAware {
     }
 
     private fun startDetailsActivity(person: Person) {
-        val intent = PeopleDetailsActivity.getIntent(context!!, person)
+        val list = arrayListOf<Person>()
+        val intent = PeopleDetailsActivity.getIntent(context!!, person, list)
         startActivity(intent)
     }
 }

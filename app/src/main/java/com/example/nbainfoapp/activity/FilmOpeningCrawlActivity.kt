@@ -26,6 +26,7 @@ class FilmOpeningCrawlActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.film_opening_crawl_layout)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
 
         val film = intent.getParcelableExtra<Film>(FILM)
 
