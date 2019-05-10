@@ -30,4 +30,10 @@ data class Planet(
     var inFavorites: Boolean,
     @PrimaryKey(autoGenerate = true)
     val id: Int? = null
-): Parcelable
+): Parcelable {
+
+    override fun hashCode() = name.hashCode()
+
+    override fun equals(other: Any?) = other is Person && name == other.name
+
+}

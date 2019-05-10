@@ -22,7 +22,6 @@ class PeopleDetailsActivity : AppCompatActivity(), KodeinAware {
 
     override val kodein by kodein()
     private val peopleDatabaseRepository: PeopleDatabaseRepository by instance()
-    private val localDatabase = mutableListOf<Person>()
 
     companion object {
 
@@ -45,9 +44,9 @@ class PeopleDetailsActivity : AppCompatActivity(), KodeinAware {
 
         val person = intent.getParcelableExtra<Person>(PERSON)
         val remoteList: ArrayList<Person> = intent.getParcelableArrayListExtra(REMOTE_LIST)
-        getPeoplesFromDatabase()
+
         setupPeopleDetailsActivity(person)
-        // setupFavoritesButton(localList, person)
+        setupFavoritesButton(getPeoplesFromDatabase(), person)
     }
 
     private fun setupPeopleDetailsActivity(person: Person) {
@@ -99,15 +98,13 @@ class PeopleDetailsActivity : AppCompatActivity(), KodeinAware {
         }
     }
 
-    private fun getPeoplesFromDatabase() {
+    private fun getPeoplesFromDatabase(): MutableList<Person> {
         val list = mutableListOf<Person>()
         GlobalScope.launch(Dispatchers.Main) {
             val database = peopleDatabaseRepository.getFavoritePeople()
-            for (person in database) {
-                person.inFavorites = false
-            }
-            localDatabase.addAll(database)
+            list.addAll(database)
         }
+        return list
     }
 
     private fun compareRemoteWithLocal(list: MutableList<Person>, person: Person): Boolean {

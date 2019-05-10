@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import android.widget.Toast
 import com.example.nbainfoapp.R
 import com.example.nbainfoapp.model.Film
 import com.example.nbainfoapp.repository.FilmsDatabaseRepository
@@ -40,7 +41,7 @@ class FilmsDetailsActivity : AppCompatActivity(), KodeinAware {
 
         val film = intent.getParcelableExtra<Film>(FILM)
         setupFilmsDetailsActivity(film)
-        setupFavoritesButton(film)
+        setupFavoritesButton(getFilmsFromDatabase(), film)
         setupOpeningCrawlButton(film)
     }
 
@@ -73,12 +74,16 @@ class FilmsDetailsActivity : AppCompatActivity(), KodeinAware {
         }
     }
 
-    private fun setupFavoritesButton(film: Film) {
+    private fun setupFavoritesButton(list: MutableList<Film>, film: Film) {
         if (film.inFavorites) {
             floatingFavoriteButton.hide()
         } else {
             floatingFavoriteButton.setOnClickListener {
-                addFilmToFavorites(film)
+                if (compareRemoteWithLocal(list, film)) {
+                    Toast.makeText(this, "chcesz to wyjebac?", Toast.LENGTH_LONG).show()
+                } else {
+                    addFilmToFavorites(film)
+                }
             }
         }
     }
@@ -92,5 +97,18 @@ class FilmsDetailsActivity : AppCompatActivity(), KodeinAware {
     private fun startOpeningCrawlActivity(film: Film) {
         val intent = FilmOpeningCrawlActivity.getIntent(this, film)
         startActivity(intent)
+    }
+
+    private fun getFilmsFromDatabase(): MutableList<Film> {
+        val list = mutableListOf<Film>()
+        GlobalScope.launch {
+            val database = filmsDatabaseRepository.getFavoriteFilms()
+            list.addAll(database)
+        }
+        return list
+    }
+
+    private fun compareRemoteWithLocal(list: MutableList<Film>, film: Film): Boolean {
+        return list.contains(film)
     }
 }

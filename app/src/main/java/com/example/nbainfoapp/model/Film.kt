@@ -24,4 +24,10 @@ data class Film(
     var inFavorites: Boolean,
     @PrimaryKey(autoGenerate = true)
     val id: Int? = null
-): Parcelable
+): Parcelable {
+
+    override fun hashCode() = title.hashCode()
+
+    override fun equals(other: Any?) = other is Person && title == other.name
+
+}

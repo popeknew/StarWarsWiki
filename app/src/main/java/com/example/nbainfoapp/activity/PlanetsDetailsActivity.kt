@@ -5,7 +5,9 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import android.widget.Toast
 import com.example.nbainfoapp.R
+import com.example.nbainfoapp.model.Person
 import com.example.nbainfoapp.model.Planet
 import com.example.nbainfoapp.repository.PlanetsDatabaseRepository
 import kotlinx.android.synthetic.main.planets_details.collapsingToolbar
@@ -48,7 +50,7 @@ class PlanetsDetailsActivity : AppCompatActivity(), KodeinAware {
 
         val planet: Planet = intent.getParcelableExtra(PLANET)
         setupPlanetsDetailsActivity(planet)
-        setupFavoritesButton(planet)
+        setupFavoritesButton(getPlanetsFromDatabase(), planet)
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -81,13 +83,30 @@ class PlanetsDetailsActivity : AppCompatActivity(), KodeinAware {
         }
     }
 
-    private fun setupFavoritesButton(planet: Planet) {
+    private fun setupFavoritesButton(list: MutableList<Planet>, planet: Planet) {
         if (planet.inFavorites) {
             floatingFavoriteButton.hide()
         } else {
             floatingFavoriteButton.setOnClickListener {
-                addPlanetToFavorites(planet)
+                if (compareRemoteWithLocal(list, planet)) {
+                    Toast.makeText(this, "chcesz to wyjebac?", Toast.LENGTH_LONG).show()
+                } else {
+                    addPlanetToFavorites(planet)
+                }
             }
         }
+    }
+
+    private fun getPlanetsFromDatabase(): MutableList<Planet> {
+        val list = mutableListOf<Planet>()
+        GlobalScope.launch {
+            val database = planetsDatabaseRepository.getFavoritePlanets()
+            list.addAll(database)
+        }
+        return list
+    }
+
+    private fun compareRemoteWithLocal(list: MutableList<Planet>, planet: Planet): Boolean {
+        return list.contains(planet)
     }
 }
