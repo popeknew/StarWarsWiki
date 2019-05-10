@@ -7,6 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.nbainfoapp.R
+import com.example.nbainfoapp.activity.PeopleDetailsActivity
+import com.example.nbainfoapp.activity.PlanetsDetailsActivity
 import com.example.nbainfoapp.adapter.PlanetsRecyclerViewAdapter
 import com.example.nbainfoapp.model.Film
 import com.example.nbainfoapp.model.Planet
@@ -48,6 +50,9 @@ class PlanetsFavoritesFragment : Fragment(), KodeinAware {
                 synchoronizePlanetsDatabase()
             }
         }
+        planetsRecyclerViewAdapter.onRowClickListener = { planet ->
+            startDetailsActivity(planet)
+        }
     }
 
     private fun synchoronizePlanetsDatabase() = GlobalScope.launch(Dispatchers.Main) {
@@ -62,5 +67,10 @@ class PlanetsFavoritesFragment : Fragment(), KodeinAware {
                 planetsRecyclerViewAdapter.removePlanet(planet, position)
             }
         }
+    }
+
+    private fun startDetailsActivity(planet: Planet) {
+        val intent = PlanetsDetailsActivity.getIntent(context!!, planet)
+        startActivity(intent)
     }
 }

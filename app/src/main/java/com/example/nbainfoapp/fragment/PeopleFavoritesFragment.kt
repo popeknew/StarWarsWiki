@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.PopupMenu
 
 import com.example.nbainfoapp.R
+import com.example.nbainfoapp.activity.PeopleDetailsActivity
 import com.example.nbainfoapp.adapter.PeopleRecyclerViewAdapter
 import com.example.nbainfoapp.model.Person
 import com.example.nbainfoapp.repository.PeopleDatabaseRepository
@@ -50,6 +51,9 @@ class PeopleFavoritesFragment : Fragment(), KodeinAware {
                 synchronizePeopleDatabase()
             }
         }
+        peopleRecyclerViewAdapter.onRowClickListener = { person ->
+            startDetailsActivity(person)
+        }
     }
 
     private fun synchronizePeopleDatabase() = GlobalScope.launch(Dispatchers.Main) {
@@ -64,5 +68,10 @@ class PeopleFavoritesFragment : Fragment(), KodeinAware {
                 peopleRecyclerViewAdapter.removePerson(person, position)
             }
         }
+    }
+
+    private fun startDetailsActivity(person: Person) {
+        val intent = PeopleDetailsActivity.getIntent(context!!, person)
+        startActivity(intent)
     }
 }

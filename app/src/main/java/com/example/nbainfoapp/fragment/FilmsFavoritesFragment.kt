@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 
 import com.example.nbainfoapp.R
+import com.example.nbainfoapp.activity.FilmsDetailsActivity
 import com.example.nbainfoapp.adapter.FilmsRecyclerViewAdapter
 import com.example.nbainfoapp.model.Film
 import com.example.nbainfoapp.repository.FilmsDatabaseRepository
@@ -48,6 +49,9 @@ class FilmsFavoritesFragment : Fragment(), KodeinAware {
                 synchronizeFilmsDatabase()
             }
         }
+        filmsRecyclerViewAdapter.onRowClickListener = {film ->
+            startDetailsActivity(film)
+        }
     }
 
     private fun synchronizeFilmsDatabase() = GlobalScope.launch(Dispatchers.Main) {
@@ -62,5 +66,9 @@ class FilmsFavoritesFragment : Fragment(), KodeinAware {
                 filmsRecyclerViewAdapter.removePerson(film, position)
             }
         }
+    }
+    private fun startDetailsActivity(film: Film) {
+        val intent = FilmsDetailsActivity.getIntent(context!!, film)
+        startActivity(intent)
     }
 }
