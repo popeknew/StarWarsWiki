@@ -75,14 +75,19 @@ class PlanetsDetailsActivity : AppCompatActivity(), KodeinAware {
     }
 
     private fun addPlanetToFavorites(planet: Planet) {
+        planet.inFavorites = true
         GlobalScope.launch {
             planetsDatabaseRepository.insertPlanet(planet)
         }
     }
 
     private fun setupFavoritesButton(planet: Planet) {
-        floatingFavoriteButton.setOnClickListener {
-            addPlanetToFavorites(planet)
+        if (planet.inFavorites) {
+            floatingFavoriteButton.hide()
+        } else {
+            floatingFavoriteButton.setOnClickListener {
+                addPlanetToFavorites(planet)
+            }
         }
     }
 }

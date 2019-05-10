@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import com.example.nbainfoapp.R
 import com.example.nbainfoapp.model.Person
 import com.example.nbainfoapp.repository.PeopleDatabaseRepository
@@ -70,14 +71,19 @@ class PeopleDetailsActivity : AppCompatActivity(), KodeinAware {
     }
 
     private fun addPersonToFavorites(person: Person) {
+        person.inFavorites = true
         GlobalScope.launch {
             peopleDatabaseRepository.insertPerson(person)
         }
     }
 
     private fun setupFavoritesButton(person: Person) {
-        floatingFavoriteButton.setOnClickListener {
-             addPersonToFavorites(person)
+        if (person.inFavorites) {
+            floatingFavoriteButton.hide()
+        } else {
+            floatingFavoriteButton.setOnClickListener {
+                addPersonToFavorites(person)
+            }
         }
     }
 }

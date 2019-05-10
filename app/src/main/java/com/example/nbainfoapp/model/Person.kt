@@ -27,6 +27,7 @@ data class Person(
     val mass: String,
     @SerializedName("skin_color")
     val skinColor: String,
+    var inFavorites: Boolean,
     @PrimaryKey(autoGenerate = true)
     val id: Int? = null
 ) : Parcelable

@@ -21,6 +21,7 @@ data class Film(
     val producer: String? = null,
     @SerializedName("release_date")
     val releaseDate: String? = null,
+    var inFavorites: Boolean,
     @PrimaryKey(autoGenerate = true)
     val id: Int? = null
 ): Parcelable

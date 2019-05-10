@@ -55,6 +55,8 @@ class FilmsDetailsActivity : AppCompatActivity(), KodeinAware {
         detailsEpisodeId.text = film.episodeId
         detailsProducer.text = film.producer
         detailsReleaseDate.text = film.releaseDate
+
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -64,13 +66,20 @@ class FilmsDetailsActivity : AppCompatActivity(), KodeinAware {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun addFilmToFavorites(film: Film) = GlobalScope.launch(Dispatchers.Main) {
-        filmsDatabaseRepository.insertFilm(film)
+    private fun addFilmToFavorites(film: Film) {
+        film.inFavorites = true
+        GlobalScope.launch(Dispatchers.Main) {
+            filmsDatabaseRepository.insertFilm(film)
+        }
     }
 
     private fun setupFavoritesButton(film: Film) {
-        floatingFavoriteButton.setOnClickListener {
-            addFilmToFavorites(film)
+        if (film.inFavorites) {
+            floatingFavoriteButton.hide()
+        } else {
+            floatingFavoriteButton.setOnClickListener {
+                addFilmToFavorites(film)
+            }
         }
     }
 

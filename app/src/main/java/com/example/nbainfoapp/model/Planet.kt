@@ -27,6 +27,7 @@ data class Planet(
     val orbitalPeriod: String,
     @SerializedName("rotation_period")
     val rotationPeriod: String,
+    var inFavorites: Boolean,
     @PrimaryKey(autoGenerate = true)
     val id: Int? = null
 ): Parcelable
