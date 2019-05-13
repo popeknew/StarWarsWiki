@@ -28,8 +28,8 @@ class PeopleFragment : Fragment(), KodeinAware {
     private val repositoryRetrofit: RepositoryRetrofit by instance()
     private val peopleRecyclerViewAdapter = PeopleRecyclerViewAdapter()
     private val remotePeopleArray = arrayListOf<Person>()
-
     var currentPage = 1
+    val pagesNumber = 9
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,24 +41,8 @@ class PeopleFragment : Fragment(), KodeinAware {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setupRecyclerView()
-
-        nextPageButton.setOnClickListener {
-            when (currentPage) {
-                9 -> view.nextPageButton.visibility = View.GONE
-                else -> view.nextPageButton.visibility = View.VISIBLE
-            }
-            currentPage += 1
-            getPeopleFromServer(repositoryRetrofit, currentPage)
-        }
-
-        previousPageButton.setOnClickListener {
-            when (currentPage) {
-                1 -> view.previousPageButton.visibility = View.GONE
-                else -> view.previousPageButton.visibility = View.VISIBLE
-            }
-            currentPage -= 1
-            getPeopleFromServer(repositoryRetrofit, currentPage)
-        }
+        setupNextPageButton()
+        setupPreviousPageButton()
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -68,22 +52,22 @@ class PeopleFragment : Fragment(), KodeinAware {
 
     private fun setupRecyclerView() {
         recycler_view.adapter = peopleRecyclerViewAdapter
-        //getPeopleFromServer(repositoryRetrofit, currentPage)
         peopleRecyclerViewAdapter.onRowClickListener = { personModel ->
             startDetailsActivity(personModel, remotePeopleArray)
         }
+        setupCurrentPageNumber(currentPage, pagesNumber)
     }
 
     private fun getPeopleFromServer(repositoryRetrofit: RepositoryRetrofit, numberOfPages: Int) {
         GlobalScope.launch {
             withContext(Dispatchers.Main) {
-               // (activity as NavigationActivity).showProgress()
+                // (activity as NavigationActivity).showProgress()
             }
             val list = repositoryRetrofit.getPeople(numberOfPages)
             remotePeopleArray.addAll(list)
             withContext(Dispatchers.Main) {
                 createListOfPeople(list)
-               // (activity as NavigationActivity).hideProgress()
+                // (activity as NavigationActivity).hideProgress()
             }
         }
     }
@@ -92,44 +76,40 @@ class PeopleFragment : Fragment(), KodeinAware {
         peopleRecyclerViewAdapter.swapPeople(list)
     }
 
-    private fun setupNextPageButton(view: View) {
-        if (currentPage < 9) {
-            nextPageButton.setOnClickListener {
+    private fun startDetailsActivity(person: Person, list: ArrayList<Person>) {
+        val intent = PeopleDetailsActivity.getIntent(context!!, person, list)
+        startActivity(intent)
+    }
+
+    private fun setupCurrentPageNumber(currentPage: Int, pagesNumber: Int) {
+        currentPageNumber.text = "$currentPage/$pagesNumber"
+    }
+
+    private fun setupNextPageButton() {
+        nextPageButton.setOnClickListener {
+            if (currentPage == pagesNumber) {
+                currentPage = 1
+                getPeopleFromServer(repositoryRetrofit, currentPage)
+                setupCurrentPageNumber(currentPage, pagesNumber)
+            } else {
                 currentPage += 1
                 getPeopleFromServer(repositoryRetrofit, currentPage)
-
-                setButtonVisible(nextPageButton)
-
+                setupCurrentPageNumber(currentPage, pagesNumber)
             }
-        } else {
-            setButtonGone(nextPageButton)
         }
     }
 
     private fun setupPreviousPageButton() {
-        if (currentPage > 1) {
-            previousPageButton.setOnClickListener {
+        previousPageButton.setOnClickListener {
+            if (currentPage == 1) {
+                currentPage = pagesNumber
+                getPeopleFromServer(repositoryRetrofit, currentPage)
+                setupCurrentPageNumber(currentPage, pagesNumber)
+            } else {
                 currentPage -= 1
                 getPeopleFromServer(repositoryRetrofit, currentPage)
-
-                setButtonVisible(previousPageButton)
-
+                setupCurrentPageNumber(currentPage, pagesNumber)
             }
-        } else {
-            setButtonGone(previousPageButton)
         }
-    }
-
-    private fun setButtonVisible(view: View) {
-        view.visibility = View.VISIBLE
-    }
-
-    private fun setButtonGone(view: View) {
-        view.visibility = View.GONE
-    }
-
-    private fun startDetailsActivity(person: Person, list: ArrayList<Person>) {
-        val intent = PeopleDetailsActivity.getIntent(context!!, person, list)
-        startActivity(intent)
     }
 }

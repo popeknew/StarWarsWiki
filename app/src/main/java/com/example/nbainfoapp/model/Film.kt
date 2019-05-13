@@ -28,6 +28,5 @@ data class Film(
 
     override fun hashCode() = title.hashCode()
 
-    override fun equals(other: Any?) = other is Person && title == other.name
-
+    override fun equals(other: Any?) = other is Film && title == other.title
 }

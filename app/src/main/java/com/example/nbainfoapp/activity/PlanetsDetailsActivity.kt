@@ -92,6 +92,7 @@ class PlanetsDetailsActivity : AppCompatActivity(), KodeinAware {
                     Toast.makeText(this, "chcesz to wyjebac?", Toast.LENGTH_LONG).show()
                 } else {
                     addPlanetToFavorites(planet)
+                    floatingFavoriteButton.isEnabled = false
                 }
             }
         }

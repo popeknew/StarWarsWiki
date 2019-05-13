@@ -25,10 +25,9 @@ class PlanetsFragment : Fragment(), KodeinAware {
 
     override val kodein by kodein()
     val repositoryRetrofit: RepositoryRetrofit by instance()
-
     val planetsRecyclerViewAdapter = PlanetsRecyclerViewAdapter()
-
     var currentPage = 1
+    val pagesNumber = 7
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,6 +39,8 @@ class PlanetsFragment : Fragment(), KodeinAware {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setupRecyclerView()
+        setupNextPageButton()
+        setupPreviousPageButton()
     }
 
     private fun setupRecyclerView() {
@@ -48,6 +49,7 @@ class PlanetsFragment : Fragment(), KodeinAware {
         planetsRecyclerViewAdapter.onRowClickListener = {planetModel ->
             startDetailsActivity(planetModel)
         }
+        setupCurrentPageNumber(currentPage, pagesNumber)
     }
 
     private fun getPlanetsFromServer(repositoryRetrofit: RepositoryRetrofit, numberOfPages: Int) {
@@ -69,5 +71,37 @@ class PlanetsFragment : Fragment(), KodeinAware {
     private fun startDetailsActivity(planet: Planet) {
         val intent = PlanetsDetailsActivity.getIntent(context!!, planet)
         startActivity(intent)
+    }
+
+    private fun setupCurrentPageNumber(currentPage: Int, pagesNumber: Int) {
+        currentPageNumber.text = "$currentPage/$pagesNumber"
+    }
+
+    private fun setupNextPageButton() {
+        nextPageButton.setOnClickListener {
+            if (currentPage == pagesNumber) {
+                currentPage = 1
+                getPlanetsFromServer(repositoryRetrofit, currentPage)
+                setupCurrentPageNumber(currentPage, pagesNumber)
+            } else {
+                currentPage += 1
+                getPlanetsFromServer(repositoryRetrofit, currentPage)
+                setupCurrentPageNumber(currentPage, pagesNumber)
+            }
+        }
+    }
+
+    private fun setupPreviousPageButton() {
+        previousPageButton.setOnClickListener {
+            if (currentPage == 1) {
+                currentPage = pagesNumber
+                getPlanetsFromServer(repositoryRetrofit, currentPage)
+                setupCurrentPageNumber(currentPage, pagesNumber)
+            } else {
+                currentPage -= 1
+                getPlanetsFromServer(repositoryRetrofit, currentPage)
+                setupCurrentPageNumber(currentPage, pagesNumber)
+            }
+        }
     }
 }

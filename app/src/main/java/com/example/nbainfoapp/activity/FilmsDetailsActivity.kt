@@ -50,7 +50,6 @@ class FilmsDetailsActivity : AppCompatActivity(), KodeinAware {
             title = film.title
             setCollapsedTitleTextColor(getColor(R.color.white))
             setExpandedTitleColor(getColor(R.color.white))
-           // expandedTitleGravity = Gravity.START
         }
         detailsDirector.text = film.director
         detailsEpisodeId.text = film.episodeId
@@ -83,6 +82,7 @@ class FilmsDetailsActivity : AppCompatActivity(), KodeinAware {
                     Toast.makeText(this, "chcesz to wyjebac?", Toast.LENGTH_LONG).show()
                 } else {
                     addFilmToFavorites(film)
+                    floatingFavoriteButton.isEnabled = false
                 }
             }
         }

@@ -35,5 +35,4 @@ data class Person(
     override fun hashCode() = name.hashCode()
 
     override fun equals(other: Any?) = other is Person && name == other.name
-
 }

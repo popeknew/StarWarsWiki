@@ -10,6 +10,7 @@ import android.widget.Toast
 import com.example.nbainfoapp.R
 import com.example.nbainfoapp.model.Person
 import com.example.nbainfoapp.repository.PeopleDatabaseRepository
+import kotlinx.android.synthetic.main.fragment_people.*
 import kotlinx.android.synthetic.main.people_details.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -92,6 +93,7 @@ class PeopleDetailsActivity : AppCompatActivity(), KodeinAware {
                     Toast.makeText(this, "chcesz to wyjebac?", Toast.LENGTH_LONG).show()
                 } else {
                     addPersonToFavorites(person)
+                    floatingFavoriteButton.isEnabled = false
                 }
             }
 

@@ -34,6 +34,5 @@ data class Planet(
 
     override fun hashCode() = name.hashCode()
 
-    override fun equals(other: Any?) = other is Person && name == other.name
-
+    override fun equals(other: Any?) = other is Planet && name == other.name
 }
