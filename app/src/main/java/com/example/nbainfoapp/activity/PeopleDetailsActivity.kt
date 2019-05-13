@@ -5,12 +5,12 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
-import android.view.View
-import android.widget.Toast
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import com.example.nbainfoapp.R
+import com.example.nbainfoapp.fragment.DeleteFromFavoritesDialogFragment
 import com.example.nbainfoapp.model.Person
 import com.example.nbainfoapp.repository.PeopleDatabaseRepository
-import kotlinx.android.synthetic.main.fragment_people.*
 import kotlinx.android.synthetic.main.people_details.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -23,9 +23,9 @@ class PeopleDetailsActivity : AppCompatActivity(), KodeinAware {
 
     override val kodein by kodein()
     private val peopleDatabaseRepository: PeopleDatabaseRepository by instance()
+    private val deleteFromFavoritesDialogFragment = DeleteFromFavoritesDialogFragment()
 
     companion object {
-
         private const val PERSON = "person"
         private const val REMOTE_LIST = "remoteList"
 
@@ -64,6 +64,9 @@ class PeopleDetailsActivity : AppCompatActivity(), KodeinAware {
         detailsEpisodeId.text = person.mass
         detailsReleaseDate.text = person.skinColor
         detailsOpeningCrawl.text = person.birthYear
+        if (person.inFavorites) {
+            floatingFavoriteButton.setImageResource(R.drawable.favorite)
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -86,17 +89,29 @@ class PeopleDetailsActivity : AppCompatActivity(), KodeinAware {
 
     private fun setupFavoritesButton(list: MutableList<Person>, person: Person) {
         if (person.inFavorites) {
-            floatingFavoriteButton.hide()
+            floatingFavoriteButton.setImageResource(R.drawable.favorite)
         } else {
             floatingFavoriteButton.setOnClickListener {
                 if (compareRemoteWithLocal(list, person)) {
-                    Toast.makeText(this, "chcesz to wyjebac?", Toast.LENGTH_LONG).show()
+                    deleteFromFavoritesDialogFragment.show(supportFragmentManager, "tag")
+                    deleteFromFavoritesDialogFragment.deleteDecision = {decision ->
+                        deleteFromFavoritesAnimation()
+                        deletePersonFromDatabase(person, decision)
+                    }
                 } else {
                     addPersonToFavorites(person)
+                    addToFavoritesAnimation()
                     floatingFavoriteButton.isEnabled = false
                 }
             }
+        }
+    }
 
+    private fun deletePersonFromDatabase(person: Person, decision: Boolean) {
+        if (decision) {
+            GlobalScope.launch(Dispatchers.Main) {
+                peopleDatabaseRepository.deletePerson(person)
+            }
         }
     }
 
@@ -111,5 +126,41 @@ class PeopleDetailsActivity : AppCompatActivity(), KodeinAware {
 
     private fun compareRemoteWithLocal(list: MutableList<Person>, person: Person): Boolean {
         return list.contains(person)
+    }
+
+    private fun addToFavoritesAnimation() {
+        val animation = AnimationUtils.loadAnimation(this, R.anim.add_to_favorites_anim)
+        animation.setAnimationListener(object: Animation.AnimationListener {
+            override fun onAnimationRepeat(animation: Animation?) {
+
+            }
+
+            override fun onAnimationEnd(animation: Animation?) {
+                floatingFavoriteButton.setImageResource(R.drawable.favorite)
+            }
+
+            override fun onAnimationStart(animation: Animation?) {
+                animation?.start()
+            }
+        })
+        floatingFavoriteButton.startAnimation(animation)
+    }
+
+    private fun deleteFromFavoritesAnimation() {
+        val animation = AnimationUtils.loadAnimation(this, R.anim.add_to_favorites_anim)
+        animation.setAnimationListener(object: Animation.AnimationListener {
+            override fun onAnimationRepeat(animation: Animation?) {
+
+            }
+
+            override fun onAnimationEnd(animation: Animation?) {
+                floatingFavoriteButton.setImageResource(R.drawable.favorite_border)
+            }
+
+            override fun onAnimationStart(animation: Animation?) {
+                animation?.start()
+            }
+        })
+        floatingFavoriteButton.startAnimation(animation)
     }
 }
