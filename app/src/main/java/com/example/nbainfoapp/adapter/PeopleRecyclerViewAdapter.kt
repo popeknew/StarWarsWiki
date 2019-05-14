@@ -1,11 +1,13 @@
 package com.example.nbainfoapp.adapter
 
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.nbainfoapp.R
 import com.example.nbainfoapp.model.Person
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.people_row.view.*
 
 class PeopleRecyclerViewAdapter :
@@ -14,6 +16,7 @@ class PeopleRecyclerViewAdapter :
     private val listOfPeople = mutableListOf<Person>()
     var onRowClickListener: ((Person) -> Unit)? = null
     var onRowLongClickListener: ((Person, Int) -> Unit)? = null
+    val list = listOf<Drawable>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PeopleViewHolder {
         return PeopleViewHolder(
@@ -36,6 +39,9 @@ class PeopleRecyclerViewAdapter :
             onRowLongClickListener?.invoke(person, position)
             true
         }
+        val imageName = nazwa(person.name)
+//        Picasso.get()
+//            .load(R.drawable.{imageName})
     }
 
     class PeopleViewHolder(view: View) : RecyclerView.ViewHolder(view)
@@ -54,5 +60,11 @@ class PeopleRecyclerViewAdapter :
     fun removePerson(person: Person, position: Int) {
         listOfPeople.remove(person)
         notifyItemRemoved(position)
+    }
+
+    private fun nazwa(text: String): String {
+       val newText = text.replace("-", "")
+        newText.trim()
+        return newText
     }
 }

@@ -53,8 +53,8 @@ class PeopleFragment : Fragment(), KodeinAware {
 
     private fun setupRecyclerView() {
         recycler_view.adapter = peopleRecyclerViewAdapter
-        peopleRecyclerViewAdapter.onRowClickListener = { personModel ->
-            startDetailsActivity(personModel, remotePeopleArray)
+        peopleRecyclerViewAdapter.onRowClickListener = { person ->
+            startDetailsActivity(person, remotePeopleArray)
         }
         setupCurrentPageNumber(currentPage, pagesNumber)
     }

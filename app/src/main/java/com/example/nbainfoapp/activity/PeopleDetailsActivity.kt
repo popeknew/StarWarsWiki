@@ -12,6 +12,7 @@ import com.example.nbainfoapp.fragment.DeleteFromFavoritesDialogFragment
 import com.example.nbainfoapp.model.Person
 import com.example.nbainfoapp.repository.PeopleDatabaseRepository
 import kotlinx.android.synthetic.main.people_details.*
+import kotlinx.android.synthetic.main.planets_row.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -19,11 +20,13 @@ import org.kodein.di.KodeinAware
 import org.kodein.di.android.kodein
 import org.kodein.di.generic.instance
 
+
 class PeopleDetailsActivity : AppCompatActivity(), KodeinAware {
 
     override val kodein by kodein()
-    private val peopleDatabaseRepository: PeopleDatabaseRepository by instance()
+    private val peopleDatabaseRepository by instance<PeopleDatabaseRepository>()
     private val deleteFromFavoritesDialogFragment = DeleteFromFavoritesDialogFragment()
+    private var localList = mutableListOf<Person>()
 
     companion object {
         private const val PERSON = "person"
@@ -43,11 +46,12 @@ class PeopleDetailsActivity : AppCompatActivity(), KodeinAware {
         supportActionBar?.setDisplayShowTitleEnabled(false)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+
         val person = intent.getParcelableExtra<Person>(PERSON)
         val remoteList: ArrayList<Person> = intent.getParcelableArrayListExtra(REMOTE_LIST)
-
+        getPeoplesFromDatabase()
         setupPeopleDetailsActivity(person)
-        setupFavoritesButton(getPeoplesFromDatabase(), person)
+        setupFavoritesButton(localList, person)
     }
 
     private fun setupPeopleDetailsActivity(person: Person) {
@@ -56,6 +60,7 @@ class PeopleDetailsActivity : AppCompatActivity(), KodeinAware {
             setCollapsedTitleTextColor(getColor(R.color.white))
             setExpandedTitleColor(getColor(R.color.white))
         }
+
         detailsDirector.text = person.height
         detailsRotationPeriod.text = person.eyeColor
         detailsOrbitalPeriod.text = person.gender
@@ -64,7 +69,7 @@ class PeopleDetailsActivity : AppCompatActivity(), KodeinAware {
         detailsEpisodeId.text = person.mass
         detailsReleaseDate.text = person.skinColor
         detailsOpeningCrawl.text = person.birthYear
-        if (person.inFavorites or compareRemoteWithLocal(getPeoplesFromDatabase(), person)) {
+        if (person.inFavorites || compareRemoteWithLocal(localList, person)) {
             floatingFavoriteButton.setImageResource(R.drawable.favorite)
         }
     }
@@ -89,19 +94,21 @@ class PeopleDetailsActivity : AppCompatActivity(), KodeinAware {
 
     private fun setupFavoritesButton(list: MutableList<Person>, person: Person) {
         if (person.inFavorites) {
-
+            floatingFavoriteButton.setOnClickListener {
+                deleteFromFavoritesDialogFragment.show(supportFragmentManager, "tag")
+                deleteFromFavoritesDialogFragment.deleteDecision = { decision ->
+                    deleteFromFavoritesAnimation(person, decision)
+                }
+            }
         } else {
             floatingFavoriteButton.setOnClickListener {
                 if (compareRemoteWithLocal(list, person)) {
                     deleteFromFavoritesDialogFragment.show(supportFragmentManager, "tag")
-                    deleteFromFavoritesDialogFragment.deleteDecision = {decision ->
-                        deleteFromFavoritesAnimation()
-                        deletePersonFromDatabase(person, decision)
+                    deleteFromFavoritesDialogFragment.deleteDecision = { decision ->
+                        deleteFromFavoritesAnimation(person, decision)
                     }
                 } else {
-                    addPersonToFavorites(person)
-                    addToFavoritesAnimation()
-                    floatingFavoriteButton.isEnabled = false
+                    addToFavoritesAnimation(person)
                 }
             }
         }
@@ -115,28 +122,22 @@ class PeopleDetailsActivity : AppCompatActivity(), KodeinAware {
         }
     }
 
-    private fun getPeoplesFromDatabase(): MutableList<Person> {
-        val list = mutableListOf<Person>()
-        GlobalScope.launch(Dispatchers.Main) {
-            val database = peopleDatabaseRepository.getFavoritePeople()
-            list.addAll(database)
-        }
-        return list
+    private fun getPeoplesFromDatabase() = GlobalScope.launch(Dispatchers.Main) {
+        localList = peopleDatabaseRepository.getFavoritePeople()
     }
 
     private fun compareRemoteWithLocal(list: MutableList<Person>, person: Person): Boolean {
         return list.contains(person)
     }
 
-    private fun addToFavoritesAnimation() {
+    private fun addToFavoritesAnimation(person: Person) {
         val animation = AnimationUtils.loadAnimation(this, R.anim.add_to_favorites_anim)
-        animation.setAnimationListener(object: Animation.AnimationListener {
-            override fun onAnimationRepeat(animation: Animation?) {
-
-            }
-
+        animation.setAnimationListener(object : Animation.AnimationListener {
+            override fun onAnimationRepeat(animation: Animation?) {}
             override fun onAnimationEnd(animation: Animation?) {
                 floatingFavoriteButton.setImageResource(R.drawable.favorite)
+                floatingFavoriteButton.isEnabled = false
+                addPersonToFavorites(person)
             }
 
             override fun onAnimationStart(animation: Animation?) {
@@ -146,15 +147,15 @@ class PeopleDetailsActivity : AppCompatActivity(), KodeinAware {
         floatingFavoriteButton.startAnimation(animation)
     }
 
-    private fun deleteFromFavoritesAnimation() {
+    private fun deleteFromFavoritesAnimation(person: Person, decision: Boolean) {
         val animation = AnimationUtils.loadAnimation(this, R.anim.add_to_favorites_anim)
-        animation.setAnimationListener(object: Animation.AnimationListener {
-            override fun onAnimationRepeat(animation: Animation?) {
-
-            }
-
+        animation.setAnimationListener(object : Animation.AnimationListener {
+            override fun onAnimationRepeat(animation: Animation?) {}
             override fun onAnimationEnd(animation: Animation?) {
                 floatingFavoriteButton.setImageResource(R.drawable.favorite_border)
+                deletePersonFromDatabase(person, decision)
+                finish()
+                startActivity(Intent(applicationContext, NavigationActivity::class.java))
             }
 
             override fun onAnimationStart(animation: Animation?) {
