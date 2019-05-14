@@ -63,9 +63,11 @@ class PeopleFragment : Fragment(), KodeinAware {
         GlobalScope.launch {
             withContext(Dispatchers.Main) {
                 loading_spinner.visibility = View.VISIBLE
+                recycler_view.visibility = View.GONE
                 val list = repositoryRetrofit.getPeople(numberOfPages)
                 remotePeopleArray.addAll(list)
                 createListOfPeople(list)
+                recycler_view.visibility = View.VISIBLE
                 loading_spinner.visibility = View.GONE
             }
         }
