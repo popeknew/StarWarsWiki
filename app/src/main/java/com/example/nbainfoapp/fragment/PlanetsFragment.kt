@@ -53,13 +53,12 @@ class PlanetsFragment : Fragment(), KodeinAware {
     }
 
     private fun getPlanetsFromServer(repositoryRetrofit: RepositoryRetrofit, numberOfPages: Int) {
-        // (activity as NavigationActivity).showProgress()
-
         GlobalScope.launch {
-            val list = repositoryRetrofit.getPlanets(numberOfPages)
             withContext(Dispatchers.Main) {
+                loading_spinner.visibility = View.VISIBLE
+                val list = repositoryRetrofit.getPlanets(numberOfPages)
                 createListOfPlanets(list)
-                // (activity as NavigationActivity).hideProgress()
+                loading_spinner.visibility = View.GONE
             }
         }
     }

@@ -23,7 +23,6 @@ class FilmsFragment : Fragment(), KodeinAware {
 
     override val kodein by kodein()
     val repositoryRetrofit: RepositoryRetrofit by instance()
-
     val filmsRecyclerViewAdapter = FilmsRecyclerViewAdapter()
 
     override fun onCreateView(
@@ -40,25 +39,24 @@ class FilmsFragment : Fragment(), KodeinAware {
 
     private fun setupRecyclerView() {
         recycler_view.adapter = filmsRecyclerViewAdapter
-        getPlanetsFromServer(repositoryRetrofit)
+        getFilmsFromServer(repositoryRetrofit)
         filmsRecyclerViewAdapter.onRowClickListener = { filmModel ->
             startDetailsActivity(filmModel)
         }
     }
 
-    private fun getPlanetsFromServer(repositoryRetrofit: RepositoryRetrofit) {
-        // (activity as NavigationActivity).showProgress()
-
+    private fun getFilmsFromServer(repositoryRetrofit: RepositoryRetrofit) {
         GlobalScope.launch {
-            val list = repositoryRetrofit.getFilms()
             withContext(Dispatchers.Main) {
-                createListOfPeople(list)
-                // (activity as NavigationActivity).hideProgress()
+                loading_spinner.visibility = View.VISIBLE
+                val list = repositoryRetrofit.getFilms()
+                createListOfFilms(list)
+                loading_spinner.visibility = View.GONE
             }
         }
     }
 
-    private fun createListOfPeople(list: MutableList<Film>) {
+    private fun createListOfFilms(list: MutableList<Film>) {
         filmsRecyclerViewAdapter.swapFilms(list)
     }
 

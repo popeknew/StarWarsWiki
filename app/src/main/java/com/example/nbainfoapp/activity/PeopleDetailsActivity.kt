@@ -64,7 +64,7 @@ class PeopleDetailsActivity : AppCompatActivity(), KodeinAware {
         detailsEpisodeId.text = person.mass
         detailsReleaseDate.text = person.skinColor
         detailsOpeningCrawl.text = person.birthYear
-        if (person.inFavorites) {
+        if (person.inFavorites or compareRemoteWithLocal(getPeoplesFromDatabase(), person)) {
             floatingFavoriteButton.setImageResource(R.drawable.favorite)
         }
     }
@@ -89,7 +89,7 @@ class PeopleDetailsActivity : AppCompatActivity(), KodeinAware {
 
     private fun setupFavoritesButton(list: MutableList<Person>, person: Person) {
         if (person.inFavorites) {
-            floatingFavoriteButton.setImageResource(R.drawable.favorite)
+
         } else {
             floatingFavoriteButton.setOnClickListener {
                 if (compareRemoteWithLocal(list, person)) {

@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.nbainfoapp.R
+import com.example.nbainfoapp.activity.NavigationActivity
 import com.example.nbainfoapp.activity.PeopleDetailsActivity
 import com.example.nbainfoapp.adapter.PeopleRecyclerViewAdapter
 import com.example.nbainfoapp.model.Person
@@ -61,13 +62,11 @@ class PeopleFragment : Fragment(), KodeinAware {
     private fun getPeopleFromServer(repositoryRetrofit: RepositoryRetrofit, numberOfPages: Int) {
         GlobalScope.launch {
             withContext(Dispatchers.Main) {
-                // (activity as NavigationActivity).showProgress()
-            }
-            val list = repositoryRetrofit.getPeople(numberOfPages)
-            remotePeopleArray.addAll(list)
-            withContext(Dispatchers.Main) {
+                loading_spinner.visibility = View.VISIBLE
+                val list = repositoryRetrofit.getPeople(numberOfPages)
+                remotePeopleArray.addAll(list)
                 createListOfPeople(list)
-                // (activity as NavigationActivity).hideProgress()
+                loading_spinner.visibility = View.GONE
             }
         }
     }
