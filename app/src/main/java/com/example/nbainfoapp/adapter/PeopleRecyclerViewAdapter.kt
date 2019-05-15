@@ -15,7 +15,7 @@ class PeopleRecyclerViewAdapter :
     RecyclerView.Adapter<PeopleRecyclerViewAdapter.PeopleViewHolder>() {
 
     private val listOfPeople = mutableListOf<Person>()
-    var onRowClickListener: ((Person) -> Unit)? = null
+    var onRowClickListener: ((Person, image: View) -> Unit)? = null
     var onRowLongClickListener: ((Person, Int) -> Unit)? = null
     val list = listOf<Drawable>()
 
@@ -35,7 +35,7 @@ class PeopleRecyclerViewAdapter :
 
         val person = listOfPeople[position]
         holder.itemView.personName.text = person.name
-        holder.itemView.setOnClickListener { onRowClickListener?.invoke(person) }
+        holder.itemView.setOnClickListener { onRowClickListener?.invoke(person, holder.itemView.personImage) }
         holder.itemView.setOnLongClickListener {
             onRowLongClickListener?.invoke(person, position)
             true

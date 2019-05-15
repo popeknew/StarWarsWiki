@@ -6,7 +6,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityOptionsCompat
 import com.example.nbainfoapp.R
+import com.example.nbainfoapp.activity.MainActivity
 import com.example.nbainfoapp.activity.NavigationActivity
 import com.example.nbainfoapp.activity.PeopleDetailsActivity
 import com.example.nbainfoapp.adapter.PeopleRecyclerViewAdapter
@@ -14,6 +16,7 @@ import com.example.nbainfoapp.model.Person
 import com.example.nbainfoapp.repository.RepositoryRetrofit
 import kotlinx.android.synthetic.main.fragment_people.*
 import kotlinx.android.synthetic.main.fragment_people.view.*
+import kotlinx.android.synthetic.main.people_row.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -41,6 +44,7 @@ class PeopleFragment : Fragment(), KodeinAware {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
         setupRecyclerView()
         setupNextPageButton()
         setupPreviousPageButton()
@@ -52,9 +56,10 @@ class PeopleFragment : Fragment(), KodeinAware {
     }
 
     private fun setupRecyclerView() {
+        recycler_view.scheduleLayoutAnimation()
         recycler_view.adapter = peopleRecyclerViewAdapter
-        peopleRecyclerViewAdapter.onRowClickListener = { person ->
-            startDetailsActivity(person)
+        peopleRecyclerViewAdapter.onRowClickListener = { person, image ->
+            startDetailsActivity(person, image)
         }
         setupCurrentPageNumber(currentPage, pagesNumber)
     }
@@ -74,12 +79,14 @@ class PeopleFragment : Fragment(), KodeinAware {
     }
 
     private fun createListOfPeople(list: MutableList<Person>) {
+        recycler_view.scheduleLayoutAnimation()
         peopleRecyclerViewAdapter.swapPeople(list)
     }
 
-    private fun startDetailsActivity(person: Person) {
+    private fun startDetailsActivity(person: Person, image: View) {
         val intent = PeopleDetailsActivity.getIntent(context!!, person)
-        startActivity(intent)
+        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity as NavigationActivity , image, "sendImage")
+        startActivity(intent, options.toBundle())
     }
 
     private fun setupCurrentPageNumber(currentPage: Int, pagesNumber: Int) {

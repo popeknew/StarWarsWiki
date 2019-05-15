@@ -7,8 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import androidx.core.app.ActivityOptionsCompat
 
 import com.example.nbainfoapp.R
+import com.example.nbainfoapp.activity.FavoritesActivity
 import com.example.nbainfoapp.activity.PeopleDetailsActivity
 import com.example.nbainfoapp.adapter.PeopleRecyclerViewAdapter
 import com.example.nbainfoapp.model.Person
@@ -51,8 +53,8 @@ class PeopleFavoritesFragment : Fragment(), KodeinAware {
                 synchronizePeopleDatabase()
             }
         }
-        peopleRecyclerViewAdapter.onRowClickListener = { person ->
-            startDetailsActivity(person)
+        peopleRecyclerViewAdapter.onRowClickListener = { person, image ->
+            startDetailsActivity(person, image)
         }
     }
 
@@ -70,8 +72,9 @@ class PeopleFavoritesFragment : Fragment(), KodeinAware {
         }
     }
 
-    private fun startDetailsActivity(person: Person) {
+    private fun startDetailsActivity(person: Person, image: View) {
         val intent = PeopleDetailsActivity.getIntent(context!!, person)
-        startActivity(intent)
+        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity as FavoritesActivity, image, "sendImage")
+        startActivity(intent, options.toBundle())
     }
 }

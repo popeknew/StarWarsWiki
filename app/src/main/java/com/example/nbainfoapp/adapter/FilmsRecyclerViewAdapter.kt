@@ -38,7 +38,6 @@ class FilmsRecyclerViewAdapter : RecyclerView.Adapter<FilmsRecyclerViewAdapter.F
         }
         Picasso.get()
             .load(createAssetsAddress(createImageName(film.title)))
-            .fit()
             .into(holder.itemView.filmImage)
     }
 
