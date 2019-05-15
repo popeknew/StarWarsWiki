@@ -5,9 +5,13 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.Toast
 import com.example.nbainfoapp.R
+import com.example.nbainfoapp.fragment.DeleteFromFavoritesDialogFragment
 import com.example.nbainfoapp.model.Film
+import com.example.nbainfoapp.model.Planet
 import com.example.nbainfoapp.repository.FilmsDatabaseRepository
 import kotlinx.android.synthetic.main.films_details.*
 import kotlinx.coroutines.Dispatchers
@@ -21,6 +25,7 @@ class FilmsDetailsActivity : AppCompatActivity(), KodeinAware {
 
     override val kodein by kodein()
     private val filmsDatabaseRepository: FilmsDatabaseRepository by instance()
+    private val deleteFromFavoritesDialogFragment = DeleteFromFavoritesDialogFragment()
 
     companion object {
 
@@ -55,7 +60,9 @@ class FilmsDetailsActivity : AppCompatActivity(), KodeinAware {
         detailsEpisodeId.text = film.episodeId
         detailsProducer.text = film.producer
         detailsReleaseDate.text = film.releaseDate
-
+        if (film.inFavorites || compareRemoteWithLocal(getFilmsFromDatabase(), film)) {
+            floatingFavoriteButton.setImageResource(R.drawable.favorite)
+        }
 
     }
 
@@ -75,21 +82,28 @@ class FilmsDetailsActivity : AppCompatActivity(), KodeinAware {
 
     private fun setupFavoritesButton(list: MutableList<Film>, film: Film) {
         if (film.inFavorites) {
-            floatingFavoriteButton.hide()
+            floatingFavoriteButton.setOnClickListener {
+                deleteFromFavoritesDialogFragment.show(supportFragmentManager, "tag")
+                deleteFromFavoritesDialogFragment.deleteDecision = { decision ->
+                    deleteFromFavoritesAnimation(film, decision)
+                }
+            }
         } else {
             floatingFavoriteButton.setOnClickListener {
                 if (compareRemoteWithLocal(list, film)) {
-                    Toast.makeText(this, "chcesz to wyjebac?", Toast.LENGTH_LONG).show()
+                    deleteFromFavoritesDialogFragment.show(supportFragmentManager, "tag")
+                    deleteFromFavoritesDialogFragment.deleteDecision = { decision ->
+                        deleteFromFavoritesAnimation(film, decision)
+                    }
                 } else {
-                    addFilmToFavorites(film)
-                    floatingFavoriteButton.isEnabled = false
+                    addToFavoritesAnimation(film)
                 }
             }
         }
     }
 
     private fun setupOpeningCrawlButton(film: Film) {
-        butonik.setOnClickListener {
+        openingCrawlButton.setOnClickListener {
             startOpeningCrawlActivity(film)
         }
     }
@@ -110,5 +124,45 @@ class FilmsDetailsActivity : AppCompatActivity(), KodeinAware {
 
     private fun compareRemoteWithLocal(list: MutableList<Film>, film: Film): Boolean {
         return list.contains(film)
+    }
+
+    private fun deleteFilmFromDatabase(film: Film, decision: Boolean) {
+        if (decision) {
+            GlobalScope.launch(Dispatchers.Main) {
+                filmsDatabaseRepository.deleteFilm(film)
+            }
+        }
+    }
+
+    private fun addToFavoritesAnimation(film: Film) {
+        val animation = AnimationUtils.loadAnimation(this, R.anim.add_to_favorites_anim)
+        animation.setAnimationListener(object : Animation.AnimationListener {
+            override fun onAnimationRepeat(animation: Animation?) {}
+            override fun onAnimationEnd(animation: Animation?) {
+                floatingFavoriteButton.setImageResource(R.drawable.favorite)
+                floatingFavoriteButton.isEnabled = false
+                addFilmToFavorites(film)
+            }
+            override fun onAnimationStart(animation: Animation?) {
+                animation?.start()
+            }
+        })
+        floatingFavoriteButton.startAnimation(animation)
+    }
+
+    private fun deleteFromFavoritesAnimation(film: Film, decision: Boolean) {
+        val animation = AnimationUtils.loadAnimation(this, R.anim.add_to_favorites_anim)
+        animation.setAnimationListener(object : Animation.AnimationListener {
+            override fun onAnimationRepeat(animation: Animation?) {}
+            override fun onAnimationEnd(animation: Animation?) {
+                floatingFavoriteButton.setImageResource(R.drawable.favorite_border)
+                deleteFilmFromDatabase(film, decision)
+                floatingFavoriteButton.isEnabled = false
+            }
+            override fun onAnimationStart(animation: Animation?) {
+                animation?.start()
+            }
+        })
+        floatingFavoriteButton.startAnimation(animation)
     }
 }

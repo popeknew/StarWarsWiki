@@ -5,8 +5,11 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.Toast
 import com.example.nbainfoapp.R
+import com.example.nbainfoapp.fragment.DeleteFromFavoritesDialogFragment
 import com.example.nbainfoapp.model.Person
 import com.example.nbainfoapp.model.Planet
 import com.example.nbainfoapp.repository.PlanetsDatabaseRepository
@@ -20,6 +23,7 @@ import kotlinx.android.synthetic.main.planets_details.detailsReleaseDate
 import kotlinx.android.synthetic.main.planets_details.detailsRotationPeriod
 import kotlinx.android.synthetic.main.planets_details.detailsSurfaceWater
 import kotlinx.android.synthetic.main.planets_details.floatingFavoriteButton
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.kodein.di.KodeinAware
@@ -30,6 +34,7 @@ class PlanetsDetailsActivity : AppCompatActivity(), KodeinAware {
 
     override val kodein by kodein()
     private val planetsDatabaseRepository: PlanetsDatabaseRepository by instance()
+    val deleteFromFavoritesDialogFragment = DeleteFromFavoritesDialogFragment()
 
     companion object {
 
@@ -74,6 +79,9 @@ class PlanetsDetailsActivity : AppCompatActivity(), KodeinAware {
         detailsSurfaceWater.text = planet.surfaceWater
         detailsRotationPeriod.text = planet.rotationPeriod
         detailsReleaseDate.text = planet.terrain
+        if (planet.inFavorites || compareRemoteWithLocal(getPlanetsFromDatabase(), planet)) {
+            floatingFavoriteButton.setImageResource(R.drawable.favorite)
+        }
     }
 
     private fun addPlanetToFavorites(planet: Planet) {
@@ -85,14 +93,21 @@ class PlanetsDetailsActivity : AppCompatActivity(), KodeinAware {
 
     private fun setupFavoritesButton(list: MutableList<Planet>, planet: Planet) {
         if (planet.inFavorites) {
-            floatingFavoriteButton.hide()
+            floatingFavoriteButton.setOnClickListener {
+                deleteFromFavoritesDialogFragment.show(supportFragmentManager, "tag")
+                deleteFromFavoritesDialogFragment.deleteDecision = { decision ->
+                    deleteFromFavoritesAnimation(planet, decision)
+                }
+            }
         } else {
             floatingFavoriteButton.setOnClickListener {
                 if (compareRemoteWithLocal(list, planet)) {
-                    Toast.makeText(this, "chcesz to wyjebac?", Toast.LENGTH_LONG).show()
+                    deleteFromFavoritesDialogFragment.show(supportFragmentManager, "tag")
+                    deleteFromFavoritesDialogFragment.deleteDecision = { decision ->
+                        deleteFromFavoritesAnimation(planet, decision)
+                    }
                 } else {
-                    addPlanetToFavorites(planet)
-                    floatingFavoriteButton.isEnabled = false
+                    addToFavoritesAnimation(planet)
                 }
             }
         }
@@ -107,7 +122,47 @@ class PlanetsDetailsActivity : AppCompatActivity(), KodeinAware {
         return list
     }
 
+    private fun deletePlanetFromDatabase(planet: Planet, decision: Boolean) {
+        if (decision) {
+            GlobalScope.launch(Dispatchers.Main) {
+                planetsDatabaseRepository.deletePlanet(planet)
+            }
+        }
+    }
+
     private fun compareRemoteWithLocal(list: MutableList<Planet>, planet: Planet): Boolean {
         return list.contains(planet)
+    }
+
+    private fun addToFavoritesAnimation(planet: Planet) {
+        val animation = AnimationUtils.loadAnimation(this, R.anim.add_to_favorites_anim)
+        animation.setAnimationListener(object : Animation.AnimationListener {
+            override fun onAnimationRepeat(animation: Animation?) {}
+            override fun onAnimationEnd(animation: Animation?) {
+                floatingFavoriteButton.setImageResource(R.drawable.favorite)
+                floatingFavoriteButton.isEnabled = false
+                addPlanetToFavorites(planet)
+            }
+            override fun onAnimationStart(animation: Animation?) {
+                animation?.start()
+            }
+        })
+        floatingFavoriteButton.startAnimation(animation)
+    }
+
+    private fun deleteFromFavoritesAnimation(planet: Planet, decision: Boolean) {
+        val animation = AnimationUtils.loadAnimation(this, R.anim.add_to_favorites_anim)
+        animation.setAnimationListener(object : Animation.AnimationListener {
+            override fun onAnimationRepeat(animation: Animation?) {}
+            override fun onAnimationEnd(animation: Animation?) {
+                floatingFavoriteButton.setImageResource(R.drawable.favorite_border)
+                deletePlanetFromDatabase(planet, decision)
+                floatingFavoriteButton.isEnabled = false
+            }
+            override fun onAnimationStart(animation: Animation?) {
+                animation?.start()
+            }
+        })
+        floatingFavoriteButton.startAnimation(animation)
     }
 }

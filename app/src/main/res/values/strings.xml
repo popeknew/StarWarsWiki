@@ -48,7 +48,7 @@
     <!-- Films details layout -->
     <string name="director">Director</string>
     <string name="episode_id">Episode No.</string>
-    <string name="opening_crawl">Opening crawl</string>
+    <string name="opening_crawl"><u>Opening crawl</u></string>
     <string name="producer">Producer</string>
     <string name="release_date">Release date</string>
 </resources>

@@ -58,15 +58,14 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
-                android:text="@string/rotation_period"
                 android:gravity="end"
+                android:text="@string/rotation_period"
                 android:textStyle="bold"
+                app:layout_constraintBaseline_toBaselineOf="@+id/detailsRotationPeriod"
                 app:layout_constraintEnd_toStartOf="@+id/guideline3"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView20" />
+                app:layout_constraintHorizontal_bias="0.8"
+                app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
                 android:id="@+id/textView16"
@@ -74,15 +73,14 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:gravity="end"
-                android:textStyle="bold"
                 android:text="@string/surface_water"
+                android:textStyle="bold"
+                app:layout_constraintBaseline_toBaselineOf="@+id/detailsSurfaceWater"
                 app:layout_constraintEnd_toStartOf="@+id/guideline3"
                 app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView14" />
+                app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
                 android:id="@+id/detailsOrbitalPeriod"
@@ -103,15 +101,14 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:gravity="end"
-                android:textStyle="bold"
                 android:text="@string/orbital_period"
+                android:textStyle="bold"
+                app:layout_constraintBaseline_toBaselineOf="@+id/detailsOrbitalPeriod"
                 app:layout_constraintEnd_toStartOf="@+id/guideline3"
                 app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView18" />
+                app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
                 android:id="@+id/detailsRotationPeriod"
@@ -145,14 +142,13 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:gravity="end"
-                android:textStyle="bold"
                 android:text="@string/terrain"
+                android:textStyle="bold"
+                app:layout_constraintBaseline_toBaselineOf="@+id/detailsReleaseDate"
                 app:layout_constraintEnd_toStartOf="@+id/guideline3"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView6" />
+                app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
                 android:id="@+id/detailsProducer"
@@ -186,14 +182,13 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
-                android:text="@string/gravity"
                 android:gravity="end"
+                android:text="@string/gravity"
                 android:textStyle="bold"
+                app:layout_constraintBaseline_toBaselineOf="@+id/detailsProducer"
                 app:layout_constraintEnd_toStartOf="@+id/guideline3"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView3" />
+                app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
                 android:id="@+id/detailsEpisodeId"
@@ -215,10 +210,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:gravity="end"
-                android:textStyle="bold"
                 android:layout_marginEnd="8dp"
+                android:gravity="end"
                 android:text="@string/climate"
+                android:textStyle="bold"
+                app:layout_constraintBaseline_toBaselineOf="@+id/detailsEpisodeId"
                 app:layout_constraintEnd_toStartOf="@+id/guideline3"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView" />
@@ -240,16 +236,15 @@
                 android:id="@+id/textView"
                 style="@style/DetailsTextStyle"
                 android:layout_width="0dp"
-                android:gravity="end"
-                android:textStyle="bold"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
+                android:gravity="end"
                 android:text="@string/diameter"
+                android:textStyle="bold"
+                app:layout_constraintBaseline_toBaselineOf="@+id/detailsDirector"
                 app:layout_constraintEnd_toStartOf="@+id/guideline3"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintStart_toStartOf="parent" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline3"
@@ -266,9 +261,10 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
-                android:text="@string/population"
                 android:gravity="end"
+                android:text="@string/population"
                 android:textStyle="bold"
+                app:layout_constraintBaseline_toBaselineOf="@+id/detailsOpeningCrawl"
                 app:layout_constraintEnd_toStartOf="@+id/guideline3"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView10" />
