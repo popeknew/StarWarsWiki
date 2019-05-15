@@ -26,7 +26,6 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:layout_marginTop="?attr/actionBarSize"
                 android:scaleType="centerCrop"
                 app:layout_collapseMode="parallax"
                 app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed"></ImageView>
@@ -46,6 +45,10 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_marginTop="50dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/details_card_shape"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -58,6 +61,8 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:text="@string/rotation_period"
+                android:gravity="end"
+                android:textStyle="bold"
                 app:layout_constraintEnd_toStartOf="@+id/guideline3"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -71,6 +76,8 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
+                android:gravity="end"
+                android:textStyle="bold"
                 android:text="@string/surface_water"
                 app:layout_constraintEnd_toStartOf="@+id/guideline3"
                 app:layout_constraintHorizontal_bias="1.0"
@@ -98,6 +105,8 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
+                android:gravity="end"
+                android:textStyle="bold"
                 android:text="@string/orbital_period"
                 app:layout_constraintEnd_toStartOf="@+id/guideline3"
                 app:layout_constraintHorizontal_bias="1.0"
@@ -138,6 +147,8 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
+                android:gravity="end"
+                android:textStyle="bold"
                 android:text="@string/terrain"
                 app:layout_constraintEnd_toStartOf="@+id/guideline3"
                 app:layout_constraintStart_toStartOf="parent"
@@ -178,6 +189,8 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:text="@string/gravity"
+                android:gravity="end"
+                android:textStyle="bold"
                 app:layout_constraintEnd_toStartOf="@+id/guideline3"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView3" />
@@ -202,6 +215,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
+                android:gravity="end"
+                android:textStyle="bold"
                 android:layout_marginEnd="8dp"
                 android:text="@string/climate"
                 app:layout_constraintEnd_toStartOf="@+id/guideline3"
@@ -225,6 +240,8 @@
                 android:id="@+id/textView"
                 style="@style/DetailsTextStyle"
                 android:layout_width="0dp"
+                android:gravity="end"
+                android:textStyle="bold"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
@@ -239,7 +256,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.39" />
+                app:layout_constraintGuide_percent="0.5" />
 
             <TextView
                 android:id="@+id/textView20"
@@ -250,6 +267,8 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:text="@string/population"
+                android:gravity="end"
+                android:textStyle="bold"
                 app:layout_constraintEnd_toStartOf="@+id/guideline3"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView10" />
