@@ -54,7 +54,7 @@ class PeopleFragment : Fragment(), KodeinAware {
     private fun setupRecyclerView() {
         recycler_view.adapter = peopleRecyclerViewAdapter
         peopleRecyclerViewAdapter.onRowClickListener = { person ->
-            startDetailsActivity(person, remotePeopleArray)
+            startDetailsActivity(person)
         }
         setupCurrentPageNumber(currentPage, pagesNumber)
     }
@@ -77,8 +77,8 @@ class PeopleFragment : Fragment(), KodeinAware {
         peopleRecyclerViewAdapter.swapPeople(list)
     }
 
-    private fun startDetailsActivity(person: Person, list: ArrayList<Person>) {
-        val intent = PeopleDetailsActivity.getIntent(context!!, person, list)
+    private fun startDetailsActivity(person: Person) {
+        val intent = PeopleDetailsActivity.getIntent(context!!, person)
         startActivity(intent)
     }
 

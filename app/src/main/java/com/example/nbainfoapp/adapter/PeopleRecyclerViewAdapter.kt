@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.nbainfoapp.R
 import com.example.nbainfoapp.model.Person
+import com.google.android.gms.common.internal.safeparcel.SafeParcelReader.createString
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.people_row.view.*
 
@@ -39,9 +40,10 @@ class PeopleRecyclerViewAdapter :
             onRowLongClickListener?.invoke(person, position)
             true
         }
-        val imageName = nazwa(person.name)
-//        Picasso.get()
-//            .load(R.drawable.{imageName})
+        Picasso.get()
+            .load(createAssetsAddress(createImageName(person.name)))
+            .fit()
+            .into(holder.itemView.personImage)
     }
 
     class PeopleViewHolder(view: View) : RecyclerView.ViewHolder(view)
@@ -62,9 +64,14 @@ class PeopleRecyclerViewAdapter :
         notifyItemRemoved(position)
     }
 
-    private fun nazwa(text: String): String {
-       val newText = text.replace("-", "")
-        newText.trim()
+    private fun createImageName(text: String): String {
+        val newText = text.replace("-", "")
+            .replace(" ", "")
+            .toLowerCase()
+            .trim()
         return newText
+    }
+    private fun createAssetsAddress(text: String): String {
+        return "file:///android_asset/$text.jpg"
     }
 }

@@ -6,6 +6,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.nbainfoapp.R
 import com.example.nbainfoapp.model.Planet
+import com.google.android.gms.common.internal.safeparcel.SafeParcelReader.createString
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.planets_row.view.*
 
 class PlanetsRecyclerViewAdapter : RecyclerView.Adapter<PlanetsRecyclerViewAdapter.PlanetsViewHolder>() {
@@ -29,6 +31,10 @@ class PlanetsRecyclerViewAdapter : RecyclerView.Adapter<PlanetsRecyclerViewAdapt
             onRowLongClickListener?.invoke(planet, position)
             true
         }
+        Picasso.get()
+            .load(createAssetsAddress(createImageName(planet.name)))
+            .fit()
+            .into(holder.itemView.planetImage)
     }
 
     class PlanetsViewHolder(view: View) : RecyclerView.ViewHolder(view)
@@ -47,5 +53,17 @@ class PlanetsRecyclerViewAdapter : RecyclerView.Adapter<PlanetsRecyclerViewAdapt
     fun removePlanet(planet: Planet, position: Int) {
         listOfPlanets.remove(planet)
         notifyItemRemoved(position)
+    }
+
+    private fun createImageName(text: String): String {
+        val newText = text.replace("-", "")
+            .replace(" ", "")
+            .toLowerCase()
+            .trim()
+        return newText
+    }
+
+    private fun createAssetsAddress(text: String): String {
+        return "file:///android_asset/$text.jpg"
     }
 }

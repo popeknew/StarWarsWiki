@@ -6,6 +6,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.nbainfoapp.R
 import com.example.nbainfoapp.model.Film
+import com.google.android.gms.common.internal.safeparcel.SafeParcelReader.createString
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.films_row.view.*
 
 class FilmsRecyclerViewAdapter : RecyclerView.Adapter<FilmsRecyclerViewAdapter.FilmsViewHolder>() {
@@ -34,6 +36,10 @@ class FilmsRecyclerViewAdapter : RecyclerView.Adapter<FilmsRecyclerViewAdapter.F
             onRowLongClickListener?.invoke(film, position)
             true
         }
+        Picasso.get()
+            .load(createAssetsAddress(createImageName(film.title)))
+            .fit()
+            .into(holder.itemView.filmImage)
     }
 
     class FilmsViewHolder(view: View) : RecyclerView.ViewHolder(view)
@@ -52,5 +58,16 @@ class FilmsRecyclerViewAdapter : RecyclerView.Adapter<FilmsRecyclerViewAdapter.F
     fun removePerson(film: Film, position: Int) {
         listOfFilms.remove(film)
         notifyItemRemoved(position)
+    }
+
+    private fun createImageName(text: String): String {
+        val newText = text.replace("-", "")
+            .replace(" ", "")
+            .toLowerCase()
+            .trim()
+        return newText
+    }
+    private fun createAssetsAddress(text: String): String {
+        return "file:///android_asset/$text.jpg"
     }
 }

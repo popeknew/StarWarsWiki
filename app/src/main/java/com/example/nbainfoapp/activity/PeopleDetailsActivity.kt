@@ -11,6 +11,7 @@ import com.example.nbainfoapp.R
 import com.example.nbainfoapp.fragment.DeleteFromFavoritesDialogFragment
 import com.example.nbainfoapp.model.Person
 import com.example.nbainfoapp.repository.PeopleDatabaseRepository
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.people_details.*
 import kotlinx.android.synthetic.main.planets_row.*
 import kotlinx.coroutines.Dispatchers
@@ -29,12 +30,10 @@ class PeopleDetailsActivity : AppCompatActivity(), KodeinAware {
 
     companion object {
         private const val PERSON = "person"
-        private const val REMOTE_LIST = "remoteList"
 
-        fun getIntent(context: Context, person: Person, list: ArrayList<Person>): Intent {
+        fun getIntent(context: Context, person: Person): Intent {
             return Intent(context, PeopleDetailsActivity::class.java).apply {
                 putExtra(PERSON, person)
-                putExtra(REMOTE_LIST, list)
             }
         }
     }
@@ -45,10 +44,7 @@ class PeopleDetailsActivity : AppCompatActivity(), KodeinAware {
         supportActionBar?.setDisplayShowTitleEnabled(false)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-
         val person = intent.getParcelableExtra<Person>(PERSON)
-        val remoteList: ArrayList<Person> = intent.getParcelableArrayListExtra(REMOTE_LIST)
-
         setupPeopleDetailsActivity(person)
         setupFavoritesButton(getPeoplesFromDatabase(), person)
     }
@@ -59,7 +55,9 @@ class PeopleDetailsActivity : AppCompatActivity(), KodeinAware {
             setCollapsedTitleTextColor(getColor(R.color.white))
             setExpandedTitleColor(getColor(R.color.white))
         }
-
+        Picasso.get()
+            .load(createAssetsAddress(createImageName(person.name)))
+            .into(collapsingToolbarImage)
         detailsDirector.text = person.height
         detailsRotationPeriod.text = person.eyeColor
         detailsOrbitalPeriod.text = person.gender
@@ -166,5 +164,17 @@ class PeopleDetailsActivity : AppCompatActivity(), KodeinAware {
             }
         })
         floatingFavoriteButton.startAnimation(animation)
+    }
+
+    private fun createImageName(text: String): String {
+        val newText = text.replace("-", "")
+            .replace(" ", "")
+            .toLowerCase()
+            .trim()
+        return newText
+    }
+
+    private fun createAssetsAddress(text: String): String {
+        return "file:///android_asset/$text.jpg"
     }
 }
