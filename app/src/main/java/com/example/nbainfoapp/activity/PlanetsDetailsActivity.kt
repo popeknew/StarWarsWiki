@@ -10,19 +10,13 @@ import android.view.animation.AnimationUtils
 import android.widget.Toast
 import com.example.nbainfoapp.R
 import com.example.nbainfoapp.fragment.DeleteFromFavoritesDialogFragment
+import com.example.nbainfoapp.fragment.ShowDetailsImageDialog
+import com.example.nbainfoapp.helper.AssetsPathConverter
 import com.example.nbainfoapp.model.Person
 import com.example.nbainfoapp.model.Planet
 import com.example.nbainfoapp.repository.PlanetsDatabaseRepository
-import kotlinx.android.synthetic.main.planets_details.collapsingToolbar
-import kotlinx.android.synthetic.main.planets_details.detailsDirector
-import kotlinx.android.synthetic.main.planets_details.detailsEpisodeId
-import kotlinx.android.synthetic.main.planets_details.detailsOpeningCrawl
-import kotlinx.android.synthetic.main.planets_details.detailsOrbitalPeriod
-import kotlinx.android.synthetic.main.planets_details.detailsProducer
-import kotlinx.android.synthetic.main.planets_details.detailsReleaseDate
-import kotlinx.android.synthetic.main.planets_details.detailsRotationPeriod
-import kotlinx.android.synthetic.main.planets_details.detailsSurfaceWater
-import kotlinx.android.synthetic.main.planets_details.floatingFavoriteButton
+import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.planets_details.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -34,9 +28,10 @@ class PlanetsDetailsActivity : AppCompatActivity(), KodeinAware {
 
     override val kodein by kodein()
     private val planetsDatabaseRepository: PlanetsDatabaseRepository by instance()
-    val deleteFromFavoritesDialogFragment = DeleteFromFavoritesDialogFragment()
+    private val deleteFromFavoritesDialogFragment = DeleteFromFavoritesDialogFragment()
+    private val assetsPathConverter = AssetsPathConverter()
 
-    companion object {
+        companion object {
 
         private const val PLANET = "person"
 
@@ -53,9 +48,11 @@ class PlanetsDetailsActivity : AppCompatActivity(), KodeinAware {
         supportActionBar?.setDisplayShowTitleEnabled(false)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+
         val planet: Planet = intent.getParcelableExtra(PLANET)
         setupPlanetsDetailsActivity(planet)
         setupFavoritesButton(getPlanetsFromDatabase(), planet)
+        setupImageFullscreen(planet.name)
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -82,6 +79,9 @@ class PlanetsDetailsActivity : AppCompatActivity(), KodeinAware {
         if (planet.inFavorites || compareRemoteWithLocal(getPlanetsFromDatabase(), planet)) {
             floatingFavoriteButton.setImageResource(R.drawable.favorite)
         }
+        Picasso.get()
+            .load(assetsPathConverter.createAssetsAddress(planet.name))
+            .into(collapsingToolbarImage)
     }
 
     private fun addPlanetToFavorites(planet: Planet) {
@@ -164,5 +164,12 @@ class PlanetsDetailsActivity : AppCompatActivity(), KodeinAware {
             }
         })
         floatingFavoriteButton.startAnimation(animation)
+    }
+
+    private fun setupImageFullscreen(name: String) {
+        collapsingToolbarImage.setOnClickListener {
+            val dialog = ShowDetailsImageDialog(name)
+            dialog.show(supportFragmentManager, "tag")
+        }
     }
 }

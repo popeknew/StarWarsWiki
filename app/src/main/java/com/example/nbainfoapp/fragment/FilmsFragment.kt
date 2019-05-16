@@ -25,8 +25,8 @@ import org.kodein.di.generic.instance
 class FilmsFragment : Fragment(), KodeinAware {
 
     override val kodein by kodein()
-    val repositoryRetrofit: RepositoryRetrofit by instance()
-    val filmsRecyclerViewAdapter = FilmsRecyclerViewAdapter()
+    private val repositoryRetrofit: RepositoryRetrofit by instance()
+    private val filmsRecyclerViewAdapter = FilmsRecyclerViewAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

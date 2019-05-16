@@ -33,8 +33,8 @@ class PeopleFragment : Fragment(), KodeinAware {
     private val repositoryRetrofit: RepositoryRetrofit by instance()
     private val peopleRecyclerViewAdapter = PeopleRecyclerViewAdapter()
     private val remotePeopleArray = arrayListOf<Person>()
-    var currentPage = 1
-    val pagesNumber = 9
+    private var currentPage = 1
+    private val pagesNumber = 9
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

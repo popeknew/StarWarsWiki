@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.nbainfoapp.R
+import com.example.nbainfoapp.helper.AssetsPathConverter
 import com.example.nbainfoapp.model.Person
 import com.google.android.gms.common.internal.safeparcel.SafeParcelReader.createString
 import com.squareup.picasso.Picasso
@@ -17,7 +18,7 @@ class PeopleRecyclerViewAdapter :
     private val listOfPeople = mutableListOf<Person>()
     var onRowClickListener: ((Person, image: View) -> Unit)? = null
     var onRowLongClickListener: ((Person, Int) -> Unit)? = null
-    val list = listOf<Drawable>()
+    private val assetsPathConverter = AssetsPathConverter()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PeopleViewHolder {
         return PeopleViewHolder(
@@ -41,7 +42,7 @@ class PeopleRecyclerViewAdapter :
             true
         }
         Picasso.get()
-            .load(createAssetsAddress(createImageName(person.name)))
+            .load(assetsPathConverter.createAssetsAddress(person.name))
             .into(holder.itemView.personImage)
     }
 
@@ -61,16 +62,5 @@ class PeopleRecyclerViewAdapter :
     fun removePerson(person: Person, position: Int) {
         listOfPeople.remove(person)
         notifyItemRemoved(position)
-    }
-
-    private fun createImageName(text: String): String {
-        val newText = text.replace("-", "")
-            .replace(" ", "")
-            .toLowerCase()
-            .trim()
-        return newText
-    }
-    private fun createAssetsAddress(text: String): String {
-        return "file:///android_asset/$text.jpg"
     }
 }

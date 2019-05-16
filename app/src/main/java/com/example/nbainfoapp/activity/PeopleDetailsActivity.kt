@@ -9,6 +9,8 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import com.example.nbainfoapp.R
 import com.example.nbainfoapp.fragment.DeleteFromFavoritesDialogFragment
+import com.example.nbainfoapp.fragment.ShowDetailsImageDialog
+import com.example.nbainfoapp.helper.AssetsPathConverter
 import com.example.nbainfoapp.model.Person
 import com.example.nbainfoapp.repository.PeopleDatabaseRepository
 import com.squareup.picasso.Picasso
@@ -27,6 +29,7 @@ class PeopleDetailsActivity : AppCompatActivity(), KodeinAware {
     override val kodein by kodein()
     private val peopleDatabaseRepository by instance<PeopleDatabaseRepository>()
     private val deleteFromFavoritesDialogFragment = DeleteFromFavoritesDialogFragment()
+    private val assetsPathConverter = AssetsPathConverter()
 
     companion object {
         private const val PERSON = "person"
@@ -47,6 +50,7 @@ class PeopleDetailsActivity : AppCompatActivity(), KodeinAware {
         val person = intent.getParcelableExtra<Person>(PERSON)
         setupPeopleDetailsActivity(person)
         setupFavoritesButton(getPeoplesFromDatabase(), person)
+        setupImageFullscreen(person.name)
     }
 
     private fun setupPeopleDetailsActivity(person: Person) {
@@ -56,7 +60,7 @@ class PeopleDetailsActivity : AppCompatActivity(), KodeinAware {
             setExpandedTitleColor(getColor(R.color.white))
         }
         Picasso.get()
-            .load(createAssetsAddress(createImageName(person.name)))
+            .load(assetsPathConverter.createAssetsAddress(person.name))
             .into(collapsingToolbarImage)
         detailsDirector.text = person.height
         detailsRotationPeriod.text = person.eyeColor
@@ -166,15 +170,10 @@ class PeopleDetailsActivity : AppCompatActivity(), KodeinAware {
         floatingFavoriteButton.startAnimation(animation)
     }
 
-    private fun createImageName(text: String): String {
-        val newText = text.replace("-", "")
-            .replace(" ", "")
-            .toLowerCase()
-            .trim()
-        return newText
-    }
-
-    private fun createAssetsAddress(text: String): String {
-        return "file:///android_asset/$text.jpg"
+    private fun setupImageFullscreen(name: String) {
+        collapsingToolbarImage.setOnClickListener {
+            val dialog = ShowDetailsImageDialog(name)
+            dialog.show(supportFragmentManager, "tag")
+        }
     }
 }

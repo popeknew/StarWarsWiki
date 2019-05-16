@@ -10,6 +10,8 @@ import android.view.animation.AnimationUtils
 import android.widget.Toast
 import com.example.nbainfoapp.R
 import com.example.nbainfoapp.fragment.DeleteFromFavoritesDialogFragment
+import com.example.nbainfoapp.fragment.ShowDetailsImageDialog
+import com.example.nbainfoapp.helper.AssetsPathConverter
 import com.example.nbainfoapp.model.Film
 import com.example.nbainfoapp.model.Planet
 import com.example.nbainfoapp.repository.FilmsDatabaseRepository
@@ -27,6 +29,7 @@ class FilmsDetailsActivity : AppCompatActivity(), KodeinAware {
     override val kodein by kodein()
     private val filmsDatabaseRepository: FilmsDatabaseRepository by instance()
     private val deleteFromFavoritesDialogFragment = DeleteFromFavoritesDialogFragment()
+    private val assetsPathConverter = AssetsPathConverter()
 
     companion object {
 
@@ -49,6 +52,7 @@ class FilmsDetailsActivity : AppCompatActivity(), KodeinAware {
         setupFilmsDetailsActivity(film)
         setupFavoritesButton(getFilmsFromDatabase(), film)
         setupOpeningCrawlButton(film)
+        setupImageFullscreen(film.title)
     }
 
     private fun setupFilmsDetailsActivity(film: Film) {
@@ -58,7 +62,7 @@ class FilmsDetailsActivity : AppCompatActivity(), KodeinAware {
             setExpandedTitleColor(getColor(R.color.white))
         }
         Picasso.get()
-            .load(createAssetsAddress(createImageName(film.title)))
+            .load(assetsPathConverter.createAssetsAddress(film.title))
             .into(collapsingToolbarImage)
         detailsDirector.text = film.director
         detailsEpisodeId.text = film.episodeId
@@ -170,15 +174,10 @@ class FilmsDetailsActivity : AppCompatActivity(), KodeinAware {
         floatingFavoriteButton.startAnimation(animation)
     }
 
-    private fun createImageName(text: String): String {
-        val newText = text.replace("-", "")
-            .replace(" ", "")
-            .toLowerCase()
-            .trim()
-        return newText
-    }
-
-    private fun createAssetsAddress(text: String): String {
-        return "file:///android_asset/$text.jpg"
+    private fun setupImageFullscreen(name: String) {
+        collapsingToolbarImage.setOnClickListener {
+            val dialog = ShowDetailsImageDialog(name)
+            dialog.show(supportFragmentManager, "tag")
+        }
     }
 }

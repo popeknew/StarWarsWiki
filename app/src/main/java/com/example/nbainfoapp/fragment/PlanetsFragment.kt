@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.core.app.ActivityOptionsCompat
 import com.example.nbainfoapp.R
 import com.example.nbainfoapp.activity.FavoritesActivity
+import com.example.nbainfoapp.activity.NavigationActivity
 import com.example.nbainfoapp.activity.PlanetsDetailsActivity
 import com.example.nbainfoapp.adapter.PlanetsRecyclerViewAdapter
 import com.example.nbainfoapp.model.Planet
@@ -26,10 +27,10 @@ import org.kodein.di.generic.instance
 class PlanetsFragment : Fragment(), KodeinAware {
 
     override val kodein by kodein()
-    val repositoryRetrofit: RepositoryRetrofit by instance()
-    val planetsRecyclerViewAdapter = PlanetsRecyclerViewAdapter()
-    var currentPage = 1
-    val pagesNumber = 7
+    private val repositoryRetrofit: RepositoryRetrofit by instance()
+    private val planetsRecyclerViewAdapter = PlanetsRecyclerViewAdapter()
+    private var currentPage = 1
+    private val pagesNumber = 7
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -75,7 +76,7 @@ class PlanetsFragment : Fragment(), KodeinAware {
 
     private fun startDetailsActivity(planet: Planet, image: View) {
         val intent = PlanetsDetailsActivity.getIntent(context!!, planet)
-        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity as FavoritesActivity, image, "sendImage")
+        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity as NavigationActivity, image, "sendImage")
         startActivity(intent, options.toBundle())
     }
 

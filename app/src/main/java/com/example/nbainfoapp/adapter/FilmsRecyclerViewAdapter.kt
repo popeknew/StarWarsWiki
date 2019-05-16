@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.nbainfoapp.R
+import com.example.nbainfoapp.helper.AssetsPathConverter
 import com.example.nbainfoapp.model.Film
 import com.google.android.gms.common.internal.safeparcel.SafeParcelReader.createString
 import com.squareup.picasso.Picasso
@@ -15,6 +16,7 @@ class FilmsRecyclerViewAdapter : RecyclerView.Adapter<FilmsRecyclerViewAdapter.F
     private val listOfFilms = mutableListOf<Film>()
     var onRowClickListener: ((Film, image: View) -> Unit)? = null
     var onRowLongClickListener: ((Film, Int) -> Unit)? = null
+    private val assetsPathConverter = AssetsPathConverter()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FilmsViewHolder {
         return FilmsViewHolder(
@@ -37,7 +39,7 @@ class FilmsRecyclerViewAdapter : RecyclerView.Adapter<FilmsRecyclerViewAdapter.F
             true
         }
         Picasso.get()
-            .load(createAssetsAddress(createImageName(film.title)))
+            .load(assetsPathConverter.createAssetsAddress(film.title))
             .into(holder.itemView.filmImage)
     }
 
@@ -57,16 +59,5 @@ class FilmsRecyclerViewAdapter : RecyclerView.Adapter<FilmsRecyclerViewAdapter.F
     fun removePerson(film: Film, position: Int) {
         listOfFilms.remove(film)
         notifyItemRemoved(position)
-    }
-
-    private fun createImageName(text: String): String {
-        val newText = text.replace("-", "")
-            .replace(" ", "")
-            .toLowerCase()
-            .trim()
-        return newText
-    }
-    private fun createAssetsAddress(text: String): String {
-        return "file:///android_asset/$text.jpg"
     }
 }
