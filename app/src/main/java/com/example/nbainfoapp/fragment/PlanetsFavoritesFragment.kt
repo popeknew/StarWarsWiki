@@ -6,7 +6,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityOptionsCompat
 import com.example.nbainfoapp.R
+import com.example.nbainfoapp.activity.FavoritesActivity
 import com.example.nbainfoapp.activity.PeopleDetailsActivity
 import com.example.nbainfoapp.activity.PlanetsDetailsActivity
 import com.example.nbainfoapp.adapter.PlanetsRecyclerViewAdapter
@@ -41,6 +43,7 @@ class PlanetsFavoritesFragment : Fragment(), KodeinAware {
     }
 
     private fun setupRecyclerView() {
+        recycler_view.scheduleLayoutAnimation()
         recycler_view.adapter = planetsRecyclerViewAdapter
         synchoronizePlanetsDatabase()
         planetsRecyclerViewAdapter.onRowLongClickListener = { planet, position ->
@@ -50,13 +53,14 @@ class PlanetsFavoritesFragment : Fragment(), KodeinAware {
                 synchoronizePlanetsDatabase()
             }
         }
-        planetsRecyclerViewAdapter.onRowClickListener = { planet ->
-            startDetailsActivity(planet)
+        planetsRecyclerViewAdapter.onRowClickListener = { planet, image ->
+            startDetailsActivity(planet, image)
         }
     }
 
     private fun synchoronizePlanetsDatabase() = GlobalScope.launch(Dispatchers.Main) {
         val list = planetsDatabaseRepository.getFavoritePlanets()
+        recycler_view.scheduleLayoutAnimation()
         planetsRecyclerViewAdapter.swapPlanets(list)
     }
 
@@ -69,8 +73,9 @@ class PlanetsFavoritesFragment : Fragment(), KodeinAware {
         }
     }
 
-    private fun startDetailsActivity(planet: Planet) {
+    private fun startDetailsActivity(planet: Planet, image: View) {
         val intent = PlanetsDetailsActivity.getIntent(context!!, planet)
+        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity as FavoritesActivity, image, "sendImage")
         startActivity(intent)
     }
 }

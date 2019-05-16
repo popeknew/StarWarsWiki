@@ -5,8 +5,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityOptionsCompat
 import com.example.nbainfoapp.R
+import com.example.nbainfoapp.activity.FavoritesActivity
 import com.example.nbainfoapp.activity.FilmsDetailsActivity
+import com.example.nbainfoapp.activity.NavigationActivity
 import com.example.nbainfoapp.adapter.FilmsRecyclerViewAdapter
 import com.example.nbainfoapp.model.Film
 import com.example.nbainfoapp.repository.RepositoryRetrofit
@@ -38,10 +41,11 @@ class FilmsFragment : Fragment(), KodeinAware {
     }
 
     private fun setupRecyclerView() {
+        recycler_view.scheduleLayoutAnimation()
         recycler_view.adapter = filmsRecyclerViewAdapter
         getFilmsFromServer(repositoryRetrofit)
-        filmsRecyclerViewAdapter.onRowClickListener = { filmModel ->
-            startDetailsActivity(filmModel)
+        filmsRecyclerViewAdapter.onRowClickListener = { filmModel, image ->
+            startDetailsActivity(filmModel, image)
         }
     }
 
@@ -57,11 +61,13 @@ class FilmsFragment : Fragment(), KodeinAware {
     }
 
     private fun createListOfFilms(list: MutableList<Film>) {
+        recycler_view.scheduleLayoutAnimation()
         filmsRecyclerViewAdapter.swapFilms(list)
     }
 
-    private fun startDetailsActivity(film: Film) {
+    private fun startDetailsActivity(film: Film, image: View) {
         val intent = FilmsDetailsActivity.getIntent(context!!, film)
-        startActivity(intent)
+        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity as NavigationActivity, image, "sendImage")
+        startActivity(intent, options.toBundle())
     }
 }

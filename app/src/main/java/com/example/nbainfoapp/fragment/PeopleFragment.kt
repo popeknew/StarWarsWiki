@@ -21,6 +21,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import leakcanary.LeakSentry
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.support.kodein
 import org.kodein.di.generic.instance
@@ -44,15 +45,10 @@ class PeopleFragment : Fragment(), KodeinAware {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
+        getPeopleFromServer(repositoryRetrofit, currentPage)
         setupRecyclerView()
         setupNextPageButton()
         setupPreviousPageButton()
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        getPeopleFromServer(repositoryRetrofit, currentPage)
     }
 
     private fun setupRecyclerView() {
@@ -120,4 +116,6 @@ class PeopleFragment : Fragment(), KodeinAware {
             }
         }
     }
+
+
 }

@@ -6,8 +6,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityOptionsCompat
 
 import com.example.nbainfoapp.R
+import com.example.nbainfoapp.activity.FavoritesActivity
 import com.example.nbainfoapp.activity.FilmsDetailsActivity
 import com.example.nbainfoapp.adapter.FilmsRecyclerViewAdapter
 import com.example.nbainfoapp.model.Film
@@ -40,6 +42,7 @@ class FilmsFavoritesFragment : Fragment(), KodeinAware {
     }
 
     private fun setupRecyclerView() {
+        recycler_view.scheduleLayoutAnimation()
         recycler_view.adapter = filmsRecyclerViewAdapter
         synchronizeFilmsDatabase()
         filmsRecyclerViewAdapter.onRowLongClickListener = { film, position ->
@@ -49,13 +52,14 @@ class FilmsFavoritesFragment : Fragment(), KodeinAware {
                 synchronizeFilmsDatabase()
             }
         }
-        filmsRecyclerViewAdapter.onRowClickListener = {film ->
-            startDetailsActivity(film)
+        filmsRecyclerViewAdapter.onRowClickListener = {film, image ->
+            startDetailsActivity(film, image)
         }
     }
 
     private fun synchronizeFilmsDatabase() = GlobalScope.launch(Dispatchers.Main) {
         val list = filmsDatabaseRepository.getFavoriteFilms()
+        recycler_view.scheduleLayoutAnimation()
         filmsRecyclerViewAdapter.swapFilms(list)
     }
 
@@ -67,8 +71,9 @@ class FilmsFavoritesFragment : Fragment(), KodeinAware {
             }
         }
     }
-    private fun startDetailsActivity(film: Film) {
+    private fun startDetailsActivity(film: Film, image: View) {
         val intent = FilmsDetailsActivity.getIntent(context!!, film)
-        startActivity(intent)
+        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity as FavoritesActivity, image, "sendImage")
+        startActivity(intent, options.toBundle())
     }
 }

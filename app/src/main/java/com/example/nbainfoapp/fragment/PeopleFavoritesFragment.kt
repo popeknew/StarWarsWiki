@@ -44,6 +44,7 @@ class PeopleFavoritesFragment : Fragment(), KodeinAware {
     }
 
     private fun setupRecyclerView() {
+        recycler_view.scheduleLayoutAnimation()
         recycler_view.adapter = peopleRecyclerViewAdapter
         synchronizePeopleDatabase()
         peopleRecyclerViewAdapter.onRowLongClickListener = { person, position  ->
@@ -60,6 +61,7 @@ class PeopleFavoritesFragment : Fragment(), KodeinAware {
 
     private fun synchronizePeopleDatabase() = GlobalScope.launch(Dispatchers.Main) {
         val list = peopleDatabaseRepository.getFavoritePeople()
+        recycler_view.scheduleLayoutAnimation()
         peopleRecyclerViewAdapter.swapPeople(list)
     }
 

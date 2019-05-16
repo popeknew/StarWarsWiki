@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.films_row.view.*
 class FilmsRecyclerViewAdapter : RecyclerView.Adapter<FilmsRecyclerViewAdapter.FilmsViewHolder>() {
 
     private val listOfFilms = mutableListOf<Film>()
-    var onRowClickListener: ((Film) -> Unit)? = null
+    var onRowClickListener: ((Film, image: View) -> Unit)? = null
     var onRowLongClickListener: ((Film, Int) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FilmsViewHolder {
@@ -31,7 +31,7 @@ class FilmsRecyclerViewAdapter : RecyclerView.Adapter<FilmsRecyclerViewAdapter.F
     override fun onBindViewHolder(holder: FilmsViewHolder, position: Int) {
         val film = listOfFilms[position]
         holder.itemView.filmTitle.text = film.title
-        holder.itemView.setOnClickListener { onRowClickListener?.invoke(film) }
+        holder.itemView.setOnClickListener { onRowClickListener?.invoke(film, holder.itemView.filmImage) }
         holder.itemView.setOnLongClickListener {
             onRowLongClickListener?.invoke(film, position)
             true

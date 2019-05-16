@@ -150,7 +150,7 @@ class PeopleDetailsActivity : AppCompatActivity(), KodeinAware {
     }
 
     private fun deleteFromFavoritesAnimation(person: Person, decision: Boolean) {
-        val animation = AnimationUtils.loadAnimation(this, R.anim.add_to_favorites_anim)
+        val animation = AnimationUtils.loadAnimation(this, R.anim.remove_from_favorites_anim)
         animation.setAnimationListener(object : Animation.AnimationListener {
             override fun onAnimationRepeat(animation: Animation?) {}
             override fun onAnimationEnd(animation: Animation?) {

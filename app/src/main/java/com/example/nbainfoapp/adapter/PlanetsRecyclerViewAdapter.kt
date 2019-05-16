@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.planets_row.view.*
 class PlanetsRecyclerViewAdapter : RecyclerView.Adapter<PlanetsRecyclerViewAdapter.PlanetsViewHolder>() {
 
     private val listOfPlanets = mutableListOf<Planet>()
-    var onRowClickListener: ((Planet) -> Unit)? = null
+    var onRowClickListener: ((Planet, image: View) -> Unit)? = null
     var onRowLongClickListener: ((Planet, Int) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlanetsViewHolder {
@@ -26,14 +26,13 @@ class PlanetsRecyclerViewAdapter : RecyclerView.Adapter<PlanetsRecyclerViewAdapt
         val planet = listOfPlanets[position]
 
         holder.itemView.planetName.text = planet.name
-        holder.itemView.setOnClickListener { onRowClickListener?.invoke(planet) }
+        holder.itemView.setOnClickListener { onRowClickListener?.invoke(planet, holder.itemView.planetImage) }
         holder.itemView.setOnLongClickListener {
             onRowLongClickListener?.invoke(planet, position)
             true
         }
         Picasso.get()
             .load(createAssetsAddress(createImageName(planet.name)))
-            .fit()
             .into(holder.itemView.planetImage)
     }
 

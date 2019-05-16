@@ -42,7 +42,6 @@ class PeopleRecyclerViewAdapter :
         }
         Picasso.get()
             .load(createAssetsAddress(createImageName(person.name)))
-            .fit()
             .into(holder.itemView.personImage)
     }
 

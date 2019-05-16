@@ -6,7 +6,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityOptionsCompat
 import com.example.nbainfoapp.R
+import com.example.nbainfoapp.activity.FavoritesActivity
 import com.example.nbainfoapp.activity.PlanetsDetailsActivity
 import com.example.nbainfoapp.adapter.PlanetsRecyclerViewAdapter
 import com.example.nbainfoapp.model.Planet
@@ -44,10 +46,11 @@ class PlanetsFragment : Fragment(), KodeinAware {
     }
 
     private fun setupRecyclerView() {
+        recycler_view.scheduleLayoutAnimation()
         recycler_view.adapter = planetsRecyclerViewAdapter
         getPlanetsFromServer(repositoryRetrofit, currentPage)
-        planetsRecyclerViewAdapter.onRowClickListener = {planetModel ->
-            startDetailsActivity(planetModel)
+        planetsRecyclerViewAdapter.onRowClickListener = {planetModel, image ->
+            startDetailsActivity(planetModel, image)
         }
         setupCurrentPageNumber(currentPage, pagesNumber)
     }
@@ -66,12 +69,14 @@ class PlanetsFragment : Fragment(), KodeinAware {
     }
 
     private fun createListOfPlanets(list: MutableList<Planet>) {
+        recycler_view.scheduleLayoutAnimation()
         planetsRecyclerViewAdapter.swapPlanets(list)
     }
 
-    private fun startDetailsActivity(planet: Planet) {
+    private fun startDetailsActivity(planet: Planet, image: View) {
         val intent = PlanetsDetailsActivity.getIntent(context!!, planet)
-        startActivity(intent)
+        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity as FavoritesActivity, image, "sendImage")
+        startActivity(intent, options.toBundle())
     }
 
     private fun setupCurrentPageNumber(currentPage: Int, pagesNumber: Int) {

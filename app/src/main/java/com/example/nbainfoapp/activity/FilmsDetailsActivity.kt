@@ -13,6 +13,7 @@ import com.example.nbainfoapp.fragment.DeleteFromFavoritesDialogFragment
 import com.example.nbainfoapp.model.Film
 import com.example.nbainfoapp.model.Planet
 import com.example.nbainfoapp.repository.FilmsDatabaseRepository
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.films_details.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -56,6 +57,9 @@ class FilmsDetailsActivity : AppCompatActivity(), KodeinAware {
             setCollapsedTitleTextColor(getColor(R.color.white))
             setExpandedTitleColor(getColor(R.color.white))
         }
+        Picasso.get()
+            .load(createAssetsAddress(createImageName(film.title)))
+            .into(collapsingToolbarImage)
         detailsDirector.text = film.director
         detailsEpisodeId.text = film.episodeId
         detailsProducer.text = film.producer
@@ -151,7 +155,7 @@ class FilmsDetailsActivity : AppCompatActivity(), KodeinAware {
     }
 
     private fun deleteFromFavoritesAnimation(film: Film, decision: Boolean) {
-        val animation = AnimationUtils.loadAnimation(this, R.anim.add_to_favorites_anim)
+        val animation = AnimationUtils.loadAnimation(this, R.anim.remove_from_favorites_anim)
         animation.setAnimationListener(object : Animation.AnimationListener {
             override fun onAnimationRepeat(animation: Animation?) {}
             override fun onAnimationEnd(animation: Animation?) {
@@ -164,5 +168,17 @@ class FilmsDetailsActivity : AppCompatActivity(), KodeinAware {
             }
         })
         floatingFavoriteButton.startAnimation(animation)
+    }
+
+    private fun createImageName(text: String): String {
+        val newText = text.replace("-", "")
+            .replace(" ", "")
+            .toLowerCase()
+            .trim()
+        return newText
+    }
+
+    private fun createAssetsAddress(text: String): String {
+        return "file:///android_asset/$text.jpg"
     }
 }
