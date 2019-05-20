@@ -6,9 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.PopupMenu
 import androidx.core.app.ActivityOptionsCompat
-
 import com.example.nbainfoapp.R
 import com.example.nbainfoapp.activity.FavoritesActivity
 import com.example.nbainfoapp.activity.PeopleDetailsActivity
@@ -19,7 +17,6 @@ import kotlinx.android.synthetic.main.fragment_people_favorites.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.support.kodein
 import org.kodein.di.generic.instance
@@ -47,7 +44,7 @@ class PeopleFavoritesFragment : Fragment(), KodeinAware {
         recycler_view.scheduleLayoutAnimation()
         recycler_view.adapter = peopleRecyclerViewAdapter
         synchronizePeopleDatabase()
-        peopleRecyclerViewAdapter.onRowLongClickListener = { person, position  ->
+        peopleRecyclerViewAdapter.onRowLongClickListener = { person, position ->
             deleteFromFavoritesDialogFragment.show(fragmentManager!!, "tag")
             deleteFromFavoritesDialogFragment.deleteDecision = { decision ->
                 deletePersonFromDatabase(person, position, decision)
@@ -76,7 +73,11 @@ class PeopleFavoritesFragment : Fragment(), KodeinAware {
 
     private fun startDetailsActivity(person: Person, image: View) {
         val intent = PeopleDetailsActivity.getIntent(context!!, person)
-        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity as FavoritesActivity, image, "sendImage")
+        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+            activity as FavoritesActivity,
+            image,
+            "sendImage"
+        )
         startActivity(intent, options.toBundle())
     }
 }

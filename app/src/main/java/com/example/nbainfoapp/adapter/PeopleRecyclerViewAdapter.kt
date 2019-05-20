@@ -36,7 +36,12 @@ class PeopleRecyclerViewAdapter :
 
         val person = listOfPeople[position]
         holder.itemView.personName.text = person.name
-        holder.itemView.setOnClickListener { onRowClickListener?.invoke(person, holder.itemView.personImage) }
+        holder.itemView.setOnClickListener {
+            onRowClickListener?.invoke(
+                person,
+                holder.itemView.personImage
+            )
+        }
         holder.itemView.setOnLongClickListener {
             onRowLongClickListener?.invoke(person, position)
             true
@@ -52,11 +57,6 @@ class PeopleRecyclerViewAdapter :
         listOfPeople.clear()
         listOfPeople.addAll(list)
         notifyDataSetChanged()
-    }
-
-    fun addPeopleList(list: MutableList<Person>) {
-        listOfPeople.addAll(list)
-        notifyItemInserted(listOfPeople.size)
     }
 
     fun removePerson(person: Person, position: Int) {

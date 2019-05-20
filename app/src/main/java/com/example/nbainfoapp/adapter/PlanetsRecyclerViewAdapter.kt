@@ -11,7 +11,8 @@ import com.google.android.gms.common.internal.safeparcel.SafeParcelReader.create
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.planets_row.view.*
 
-class PlanetsRecyclerViewAdapter : RecyclerView.Adapter<PlanetsRecyclerViewAdapter.PlanetsViewHolder>() {
+class PlanetsRecyclerViewAdapter :
+    RecyclerView.Adapter<PlanetsRecyclerViewAdapter.PlanetsViewHolder>() {
 
     private val listOfPlanets = mutableListOf<Planet>()
     var onRowClickListener: ((Planet, image: View) -> Unit)? = null
@@ -19,7 +20,13 @@ class PlanetsRecyclerViewAdapter : RecyclerView.Adapter<PlanetsRecyclerViewAdapt
     private val assetsPathConverter = AssetsPathConverter()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlanetsViewHolder {
-        return PlanetsViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.planets_row, parent, false))
+        return PlanetsViewHolder(
+            LayoutInflater.from(parent.context).inflate(
+                R.layout.planets_row,
+                parent,
+                false
+            )
+        )
     }
 
     override fun getItemCount(): Int = listOfPlanets.size
@@ -28,7 +35,12 @@ class PlanetsRecyclerViewAdapter : RecyclerView.Adapter<PlanetsRecyclerViewAdapt
         val planet = listOfPlanets[position]
 
         holder.itemView.planetName.text = planet.name
-        holder.itemView.setOnClickListener { onRowClickListener?.invoke(planet, holder.itemView.planetImage) }
+        holder.itemView.setOnClickListener {
+            onRowClickListener?.invoke(
+                planet,
+                holder.itemView.planetImage
+            )
+        }
         holder.itemView.setOnLongClickListener {
             onRowLongClickListener?.invoke(planet, position)
             true
@@ -44,11 +56,6 @@ class PlanetsRecyclerViewAdapter : RecyclerView.Adapter<PlanetsRecyclerViewAdapt
         listOfPlanets.clear()
         listOfPlanets.addAll(list)
         notifyDataSetChanged()
-    }
-
-    fun addPlanetsList(list: MutableList<Planet>) {
-        listOfPlanets.addAll(list)
-        notifyItemInserted(listOfPlanets.size)
     }
 
     fun removePlanet(planet: Planet, position: Int) {

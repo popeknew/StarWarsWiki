@@ -8,20 +8,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityOptionsCompat
 import com.example.nbainfoapp.R
-import com.example.nbainfoapp.activity.MainActivity
 import com.example.nbainfoapp.activity.NavigationActivity
 import com.example.nbainfoapp.activity.PeopleDetailsActivity
 import com.example.nbainfoapp.adapter.PeopleRecyclerViewAdapter
 import com.example.nbainfoapp.model.Person
 import com.example.nbainfoapp.repository.RepositoryRetrofit
 import kotlinx.android.synthetic.main.fragment_people.*
-import kotlinx.android.synthetic.main.fragment_people.view.*
-import kotlinx.android.synthetic.main.people_row.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import leakcanary.LeakSentry
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.support.kodein
 import org.kodein.di.generic.instance
@@ -81,7 +77,11 @@ class PeopleFragment : Fragment(), KodeinAware {
 
     private fun startDetailsActivity(person: Person, image: View) {
         val intent = PeopleDetailsActivity.getIntent(context!!, person)
-        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity as NavigationActivity , image, "sendImage")
+        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+            activity as NavigationActivity,
+            image,
+            "sendImage"
+        )
         startActivity(intent, options.toBundle())
     }
 

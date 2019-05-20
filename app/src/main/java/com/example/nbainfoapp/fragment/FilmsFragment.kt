@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityOptionsCompat
 import com.example.nbainfoapp.R
-import com.example.nbainfoapp.activity.FavoritesActivity
 import com.example.nbainfoapp.activity.FilmsDetailsActivity
 import com.example.nbainfoapp.activity.NavigationActivity
 import com.example.nbainfoapp.adapter.FilmsRecyclerViewAdapter
@@ -67,7 +66,11 @@ class FilmsFragment : Fragment(), KodeinAware {
 
     private fun startDetailsActivity(film: Film, image: View) {
         val intent = FilmsDetailsActivity.getIntent(context!!, film)
-        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity as NavigationActivity, image, "sendImage")
+        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+            activity as NavigationActivity,
+            image,
+            "sendImage"
+        )
         startActivity(intent, options.toBundle())
     }
 }

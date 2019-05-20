@@ -15,7 +15,9 @@ import com.example.nbainfoapp.model.Person
 import com.example.nbainfoapp.repository.PeopleDatabaseRepository
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.people_details.*
-import kotlinx.android.synthetic.main.planets_row.*
+import kotlinx.android.synthetic.main.people_details.collapsingToolbar
+import kotlinx.android.synthetic.main.people_details.collapsingToolbarImage
+import kotlinx.android.synthetic.main.people_details.floatingFavoriteButton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -62,14 +64,14 @@ class PeopleDetailsActivity : AppCompatActivity(), KodeinAware {
         Picasso.get()
             .load(assetsPathConverter.createAssetsAddress(person.name))
             .into(collapsingToolbarImage)
-        detailsDirector.text = person.height
-        detailsRotationPeriod.text = person.eyeColor
-        detailsOrbitalPeriod.text = person.gender
-        detailsProducer.text = person.hairColor
-        detailsSurfaceWater.text = person.homeworld
-        detailsEpisodeId.text = person.mass
-        detailsReleaseDate.text = person.skinColor
-        detailsOpeningCrawl.text = person.birthYear
+        detailsHeight.text = person.height
+        detailsEyeColor.text = person.eyeColor
+        detailsGender.text = person.gender
+        detailsHairColor.text = person.hairColor
+        detailsHomeworld.text = person.homeworld
+        detailsMass.text = person.mass
+        detailsSkinColor.text = person.skinColor
+        detailsBirthYear.text = person.birthYear
         if (person.inFavorites || compareRemoteWithLocal(getPeoplesFromDatabase(), person)) {
             floatingFavoriteButton.setImageResource(R.drawable.favorite)
         }
@@ -80,10 +82,6 @@ class PeopleDetailsActivity : AppCompatActivity(), KodeinAware {
             android.R.id.home -> finish()
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    private fun addString(list: Array<String>): String {
-        return list.joinToString(separator = ", ")
     }
 
     private fun addPersonToFavorites(person: Person) {

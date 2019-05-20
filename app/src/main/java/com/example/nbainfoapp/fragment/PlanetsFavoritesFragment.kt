@@ -9,10 +9,8 @@ import android.view.ViewGroup
 import androidx.core.app.ActivityOptionsCompat
 import com.example.nbainfoapp.R
 import com.example.nbainfoapp.activity.FavoritesActivity
-import com.example.nbainfoapp.activity.PeopleDetailsActivity
 import com.example.nbainfoapp.activity.PlanetsDetailsActivity
 import com.example.nbainfoapp.adapter.PlanetsRecyclerViewAdapter
-import com.example.nbainfoapp.model.Film
 import com.example.nbainfoapp.model.Planet
 import com.example.nbainfoapp.repository.PlanetsDatabaseRepository
 import kotlinx.android.synthetic.main.fragment_planets_favorites.*
@@ -75,7 +73,11 @@ class PlanetsFavoritesFragment : Fragment(), KodeinAware {
 
     private fun startDetailsActivity(planet: Planet, image: View) {
         val intent = PlanetsDetailsActivity.getIntent(context!!, planet)
-        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity as FavoritesActivity, image, "sendImage")
+        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+            activity as FavoritesActivity,
+            image,
+            "sendImage"
+        )
         startActivity(intent)
     }
 }

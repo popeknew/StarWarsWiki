@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityOptionsCompat
-
 import com.example.nbainfoapp.R
 import com.example.nbainfoapp.activity.FavoritesActivity
 import com.example.nbainfoapp.activity.FilmsDetailsActivity
@@ -52,7 +51,7 @@ class FilmsFavoritesFragment : Fragment(), KodeinAware {
                 synchronizeFilmsDatabase()
             }
         }
-        filmsRecyclerViewAdapter.onRowClickListener = {film, image ->
+        filmsRecyclerViewAdapter.onRowClickListener = { film, image ->
             startDetailsActivity(film, image)
         }
     }
@@ -71,9 +70,14 @@ class FilmsFavoritesFragment : Fragment(), KodeinAware {
             }
         }
     }
+
     private fun startDetailsActivity(film: Film, image: View) {
         val intent = FilmsDetailsActivity.getIntent(context!!, film)
-        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity as FavoritesActivity, image, "sendImage")
+        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+            activity as FavoritesActivity,
+            image,
+            "sendImage"
+        )
         startActivity(intent, options.toBundle())
     }
 }

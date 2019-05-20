@@ -10,7 +10,8 @@ import com.example.nbainfoapp.fragment.PlanetsFavoritesFragment
 
 private const val NUMBER_OF_TABS = 3
 
-class FavoritesViewPagerAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(fragmentManager) {
+class FavoritesViewPagerAdapter(fragmentManager: FragmentManager) :
+    FragmentPagerAdapter(fragmentManager) {
 
     override fun getItem(position: Int): Fragment = when (position) {
         0 -> PeopleFavoritesFragment()
@@ -20,7 +21,7 @@ class FavoritesViewPagerAdapter(fragmentManager: FragmentManager) : FragmentPage
 
     override fun getCount(): Int = NUMBER_OF_TABS
 
-    override fun getPageTitle(position: Int): CharSequence? = when(position) {
+    override fun getPageTitle(position: Int): CharSequence? = when (position) {
         0 -> "People"
         1 -> "Planets"
         else -> "Films"

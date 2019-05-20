@@ -29,13 +29,13 @@ class FilmOpeningCrawlActivity : AppCompatActivity() {
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
         val film = intent.getParcelableExtra<Film>(FILM)
-
-       setupText(film)
+        setupText(film)
     }
 
     private fun setupText(film: Film) {
         openigCrawlText.text = film.openingCrawl
-        val fromBottomToTopAnim: Animation = AnimationUtils.loadAnimation(this, R.anim.from_bottom_to_top)
+        val fromBottomToTopAnim: Animation =
+            AnimationUtils.loadAnimation(this, R.anim.from_bottom_to_top)
         openigCrawlText.animation = fromBottomToTopAnim
     }
 }

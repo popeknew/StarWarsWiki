@@ -44,6 +44,7 @@ dependencies {
     def room_version = "2.1.0-alpha07"
     def nav_version = "2.1.0-alpha02"
     def retrofit2_version = "2.5.0"
+    def lifecycle_version = "2.0.0"
     detekt "io.gitlab.arturbosch.detekt:detekt-cli:1.0.0.RC9.2"
     ktlint "com.github.shyiko:ktlint:0.29.0"
     implementation "me.cassiano:ktlint-html-reporter:0.2.0"
@@ -79,6 +80,9 @@ dependencies {
     implementation "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2"
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation 'net.opacapp:multiline-collapsingtoolbar:27.1.1'
+    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
+    annotationProcessor "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-runtime:$lifecycle_version"
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0-alpha-1'
 }
 

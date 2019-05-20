@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityOptionsCompat
 import com.example.nbainfoapp.R
-import com.example.nbainfoapp.activity.FavoritesActivity
 import com.example.nbainfoapp.activity.NavigationActivity
 import com.example.nbainfoapp.activity.PlanetsDetailsActivity
 import com.example.nbainfoapp.adapter.PlanetsRecyclerViewAdapter
@@ -50,7 +49,7 @@ class PlanetsFragment : Fragment(), KodeinAware {
         recycler_view.scheduleLayoutAnimation()
         recycler_view.adapter = planetsRecyclerViewAdapter
         getPlanetsFromServer(repositoryRetrofit, currentPage)
-        planetsRecyclerViewAdapter.onRowClickListener = {planetModel, image ->
+        planetsRecyclerViewAdapter.onRowClickListener = { planetModel, image ->
             startDetailsActivity(planetModel, image)
         }
         setupCurrentPageNumber(currentPage, pagesNumber)
@@ -76,7 +75,11 @@ class PlanetsFragment : Fragment(), KodeinAware {
 
     private fun startDetailsActivity(planet: Planet, image: View) {
         val intent = PlanetsDetailsActivity.getIntent(context!!, planet)
-        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity as NavigationActivity, image, "sendImage")
+        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+            activity as NavigationActivity,
+            image,
+            "sendImage"
+        )
         startActivity(intent, options.toBundle())
     }
 

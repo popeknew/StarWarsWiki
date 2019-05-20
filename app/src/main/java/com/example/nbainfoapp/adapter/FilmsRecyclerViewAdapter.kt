@@ -33,7 +33,12 @@ class FilmsRecyclerViewAdapter : RecyclerView.Adapter<FilmsRecyclerViewAdapter.F
     override fun onBindViewHolder(holder: FilmsViewHolder, position: Int) {
         val film = listOfFilms[position]
         holder.itemView.filmTitle.text = film.title
-        holder.itemView.setOnClickListener { onRowClickListener?.invoke(film, holder.itemView.filmImage) }
+        holder.itemView.setOnClickListener {
+            onRowClickListener?.invoke(
+                film,
+                holder.itemView.filmImage
+            )
+        }
         holder.itemView.setOnLongClickListener {
             onRowLongClickListener?.invoke(film, position)
             true
@@ -49,11 +54,6 @@ class FilmsRecyclerViewAdapter : RecyclerView.Adapter<FilmsRecyclerViewAdapter.F
         listOfFilms.clear()
         listOfFilms.addAll(list)
         notifyDataSetChanged()
-    }
-
-    fun addFilmsList(list: MutableList<Film>) {
-        listOfFilms.addAll(list)
-        notifyItemInserted(listOfFilms.size)
     }
 
     fun removePerson(film: Film, position: Int) {

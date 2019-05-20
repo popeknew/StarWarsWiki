@@ -55,6 +55,104 @@
             android:background="@drawable/details_card_shape">
 
             <TextView
+                android:id="@+id/detailsSurfaceWater"
+                style="@style/DetailsTextStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.111"
+                app:layout_constraintStart_toStartOf="@+id/guideline3"
+                app:layout_constraintTop_toBottomOf="@+id/detailsOrbitalPeriod"
+                tools:text="40" />
+
+            <TextView
+                android:id="@+id/detailsOrbitalPeriod"
+                style="@style/DetailsTextStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.111"
+                app:layout_constraintStart_toStartOf="@+id/guideline3"
+                app:layout_constraintTop_toBottomOf="@+id/detailsRotationPeriod"
+                tools:text="364" />
+
+            <TextView
+                android:id="@+id/detailsRotationPeriod"
+                style="@style/DetailsTextStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/guideline3"
+                app:layout_constraintTop_toBottomOf="@+id/detailsPopulation"
+                tools:text="24" />
+
+            <TextView
+                android:id="@+id/detailsPopulation"
+                style="@style/DetailsTextStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/guideline3"
+                app:layout_constraintTop_toBottomOf="@+id/detailsTerrain"
+                tools:text="2000000000" />
+
+            <TextView
+                android:id="@+id/detailsTerrain"
+                style="@style/DetailsTextStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/guideline3"
+                app:layout_constraintTop_toBottomOf="@+id/detailsGravity"
+                tools:text="grasslands, mountains" />
+
+            <TextView
+                android:id="@+id/detailsClimate"
+                style="@style/DetailsTextStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.111"
+                app:layout_constraintStart_toStartOf="@+id/guideline3"
+                app:layout_constraintTop_toBottomOf="@+id/detailsDiameter"
+                tools:text="temperate" />
+
+            <TextView
+                android:id="@+id/detailsGravity"
+                style="@style/DetailsTextStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                tools:text="1 standard"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="@+id/guideline3"
+                app:layout_constraintTop_toBottomOf="@+id/detailsClimate" />
+
+            <TextView
                 android:id="@+id/textView18"
                 style="@style/DetailsTextStyle"
                 android:layout_width="0dp"
@@ -85,19 +183,6 @@
                 app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
-                android:id="@+id/detailsOrbitalPeriod"
-                style="@style/DetailsTextStyle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:text="122"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/guideline3"
-                app:layout_constraintTop_toBottomOf="@+id/detailsRotationPeriod" />
-
-            <TextView
                 android:id="@+id/textView14"
                 style="@style/DetailsTextStyle"
                 android:layout_width="0dp"
@@ -113,32 +198,6 @@
                 app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
-                android:id="@+id/detailsRotationPeriod"
-                style="@style/DetailsTextStyle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:text="22"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/guideline3"
-                app:layout_constraintTop_toBottomOf="@+id/detailsOpeningCrawl" />
-
-            <TextView
-                android:id="@+id/detailsReleaseDate"
-                style="@style/DetailsTextStyle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:text="terrain"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/guideline3"
-                app:layout_constraintTop_toBottomOf="@+id/detailsProducer" />
-
-            <TextView
                 android:id="@+id/textView10"
                 style="@style/DetailsTextStyle"
                 android:layout_width="0dp"
@@ -148,35 +207,9 @@
                 android:gravity="end"
                 android:text="@string/terrain"
                 android:textStyle="bold"
-                app:layout_constraintBaseline_toBaselineOf="@+id/detailsReleaseDate"
+                app:layout_constraintBaseline_toBaselineOf="@+id/detailsTerrain"
                 app:layout_constraintEnd_toStartOf="@+id/guideline3"
                 app:layout_constraintStart_toStartOf="parent" />
-
-            <TextView
-                android:id="@+id/detailsProducer"
-                style="@style/DetailsTextStyle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:text="standard"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/guideline3"
-                app:layout_constraintTop_toBottomOf="@+id/detailsEpisodeId" />
-
-            <TextView
-                android:id="@+id/detailsSurfaceWater"
-                style="@style/DetailsTextStyle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:text="0,8"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/guideline3"
-                app:layout_constraintTop_toBottomOf="@+id/detailsOrbitalPeriod" />
 
             <TextView
                 android:id="@+id/textView6"
@@ -188,22 +221,9 @@
                 android:gravity="end"
                 android:text="@string/gravity"
                 android:textStyle="bold"
-                app:layout_constraintBaseline_toBaselineOf="@+id/detailsProducer"
+                app:layout_constraintBaseline_toBaselineOf="@+id/detailsGravity"
                 app:layout_constraintEnd_toStartOf="@+id/guideline3"
                 app:layout_constraintStart_toStartOf="parent" />
-
-            <TextView
-                android:id="@+id/detailsEpisodeId"
-                style="@style/DetailsTextStyle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:text="temperate, arid, windy"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/guideline3"
-                app:layout_constraintTop_toBottomOf="@+id/detailsDirector" />
 
             <TextView
                 android:id="@+id/textView3"
@@ -211,28 +231,26 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:gravity="end"
                 android:text="@string/climate"
                 android:textStyle="bold"
-                app:layout_constraintBaseline_toBaselineOf="@+id/detailsEpisodeId"
+                app:layout_constraintBaseline_toBaselineOf="@+id/detailsClimate"
                 app:layout_constraintEnd_toStartOf="@+id/guideline3"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView" />
+                app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
-                android:id="@+id/detailsDirector"
+                android:id="@+id/detailsDiameter"
                 style="@style/DetailsTextStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
-                android:text="12900"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/guideline3"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="12900" />
 
             <TextView
                 android:id="@+id/textView"
@@ -244,8 +262,9 @@
                 android:gravity="end"
                 android:text="@string/diameter"
                 android:textStyle="bold"
-                app:layout_constraintBaseline_toBaselineOf="@+id/detailsDirector"
+                app:layout_constraintBaseline_toBaselineOf="@+id/detailsDiameter"
                 app:layout_constraintEnd_toStartOf="@+id/guideline3"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <androidx.constraintlayout.widget.Guideline
@@ -261,28 +280,14 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:gravity="end"
                 android:text="@string/population"
                 android:textStyle="bold"
-                app:layout_constraintBaseline_toBaselineOf="@+id/detailsOpeningCrawl"
+                app:layout_constraintBaseline_toBaselineOf="@+id/detailsPopulation"
                 app:layout_constraintEnd_toStartOf="@+id/guideline3"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView10" />
+                app:layout_constraintStart_toStartOf="parent" />
 
-            <TextView
-                android:id="@+id/detailsOpeningCrawl"
-                style="@style/DetailsTextStyle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:text="12111"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/guideline3"
-                app:layout_constraintTop_toBottomOf="@+id/detailsReleaseDate" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 

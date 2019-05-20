@@ -7,16 +7,17 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.widget.Toast
 import com.example.nbainfoapp.R
 import com.example.nbainfoapp.fragment.DeleteFromFavoritesDialogFragment
 import com.example.nbainfoapp.fragment.ShowDetailsImageDialog
 import com.example.nbainfoapp.helper.AssetsPathConverter
-import com.example.nbainfoapp.model.Person
 import com.example.nbainfoapp.model.Planet
 import com.example.nbainfoapp.repository.PlanetsDatabaseRepository
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.planets_details.*
+import kotlinx.android.synthetic.main.planets_details.collapsingToolbar
+import kotlinx.android.synthetic.main.planets_details.collapsingToolbarImage
+import kotlinx.android.synthetic.main.planets_details.floatingFavoriteButton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -31,8 +32,7 @@ class PlanetsDetailsActivity : AppCompatActivity(), KodeinAware {
     private val deleteFromFavoritesDialogFragment = DeleteFromFavoritesDialogFragment()
     private val assetsPathConverter = AssetsPathConverter()
 
-        companion object {
-
+    companion object {
         private const val PLANET = "person"
 
         fun getIntent(context: Context, planet: Planet): Intent {
@@ -47,7 +47,6 @@ class PlanetsDetailsActivity : AppCompatActivity(), KodeinAware {
         setContentView(R.layout.planets_details)
         supportActionBar?.setDisplayShowTitleEnabled(false)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
 
         val planet: Planet = intent.getParcelableExtra(PLANET)
         setupPlanetsDetailsActivity(planet)
@@ -68,14 +67,14 @@ class PlanetsDetailsActivity : AppCompatActivity(), KodeinAware {
             setExpandedTitleColor(getColor(R.color.white))
             setCollapsedTitleTextColor(getColor(R.color.white))
         }
-        detailsEpisodeId.text = planet.climate
-        detailsDirector.text = planet.diameter
-        detailsProducer.text = planet.gravity
+        detailsClimate.text = planet.climate
+        detailsDiameter.text = planet.diameter
+        detailsGravity.text = planet.gravity
         detailsOrbitalPeriod.text = planet.orbitalPeriod
-        detailsOpeningCrawl.text = planet.population
+        detailsPopulation.text = planet.population
         detailsSurfaceWater.text = planet.surfaceWater
         detailsRotationPeriod.text = planet.rotationPeriod
-        detailsReleaseDate.text = planet.terrain
+        detailsTerrain.text = planet.terrain
         if (planet.inFavorites || compareRemoteWithLocal(getPlanetsFromDatabase(), planet)) {
             floatingFavoriteButton.setImageResource(R.drawable.favorite)
         }
@@ -143,6 +142,7 @@ class PlanetsDetailsActivity : AppCompatActivity(), KodeinAware {
                 floatingFavoriteButton.isEnabled = false
                 addPlanetToFavorites(planet)
             }
+
             override fun onAnimationStart(animation: Animation?) {
                 animation?.start()
             }
@@ -159,6 +159,7 @@ class PlanetsDetailsActivity : AppCompatActivity(), KodeinAware {
                 deletePlanetFromDatabase(planet, decision)
                 floatingFavoriteButton.isEnabled = false
             }
+
             override fun onAnimationStart(animation: Animation?) {
                 animation?.start()
             }
